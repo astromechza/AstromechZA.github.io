@@ -4,12 +4,14 @@ title: Home
 ---
 <div class="row">
     <div class="col-md-8">
-        {% for post in site.posts limit:1 %}
+        <div class="page-header">
+          <h1>Recent Posts</h1>
+        </div>
+        {% for post in site.posts limit:2 %}
 
             <div class="page-header">
-              <h2>{{ post.title }} <small>{{ post.date | date_to_string }}</small></h2>
+                <h2>{{ post.title }} <small>{{ post.date | date_to_string }}</small></h2>
             </div>
-
             {{ post.content }}
 
         {% endfor %}
@@ -17,7 +19,7 @@ title: Home
     <div class="col-md-4">
 
         <div class="list-group">
-            <div class="list-group-item active">Recent Posts:</div>
+            <div class="list-group-item active">Posts:</div>
             {% for post in site.posts %}
                 <a href="{{ post.url }}" class="list-group-item">{{ post.date | date_to_string}} <small>{{ post.title }}</small></a>
             {% endfor %}
