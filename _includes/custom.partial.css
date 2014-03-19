@@ -13,7 +13,6 @@ body {
 .navbar-default {
     background-color: {{ page.act_bg }};
     border-color: {{ page.def_bg }};
-    margin-bottom: 0px;
 }
 .navbar-default .navbar-brand {
     color: {{ page.def_col }};
@@ -81,4 +80,9 @@ a:hover {
 
 a:visited {
     color: {{ page.act_bg }};
+}
+
+.list-group-item.active {
+    background-color: {{ page.def_bg }};
+    color: #fff;
 }
