@@ -2,7 +2,7 @@
 # For more see: http://jekyllrb.com/docs/permalinks/
 permalink: /:categories/:year/:month/:day/:title
 
-exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile"]
+exclude: [".gitignore", ".ruby-version", "README.md", "Gemfile", "Gemfile.lock"]
 pygments: true
 
 title : My mind on code
