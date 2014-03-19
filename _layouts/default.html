@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ page.title }}</title>
+    <title>{{ site.title }} : {{ page.title }}</title>
 
     {% include css.partial.html %}
 </head>
@@ -13,8 +13,10 @@
 
     {% include nav.partial.html %}
 
-    <div class="container">
-        {{ content }}
+    <div class="container narrow-container">
+        <div class="row">
+            {{ content }}
+        </div>
     </div>
 </body>
 </html>

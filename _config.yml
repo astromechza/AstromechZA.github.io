@@ -5,8 +5,8 @@ permalink: /:categories/:year/:month/:day/:title
 exclude: [".gitignore", ".ruby-version", "README.md", "Gemfile", "Gemfile.lock"]
 pygments: true
 
-title : My mind on code
-tagline: What is this even.
+title : AstromechZA
+tagline: My Mind on Code
 author :
   name : Ben Meier
   email : benmeier42+github@gmail.com
