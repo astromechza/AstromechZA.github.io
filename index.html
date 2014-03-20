@@ -4,10 +4,8 @@ title: Home
 ---
 <div class="row">
     <div class="col-md-8">
-        <div class="page-header">
-          <h1>Recent Posts</h1>
-        </div>
-        {% for post in site.posts limit:2 %}
+        <h4>Latest Post:</h4>
+        {% for post in site.posts limit:1 %}
 
             <div class="page-header">
                 <h2><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date_to_string }}</small></h2>
@@ -15,6 +13,16 @@ title: Home
 
             <div class="post-content front-page">
                 {{ post.content }}
+            </div>
+
+            <div class="postnavlinks">
+                <div class="clearfix"></div>
+                {% if post.previous.url %}
+                    <div class="pull-left">
+                        <a href="{{ post.previous.url }}"><i class="fa fa-arrow-left"></i> {{ post.previous.title }} [older]</a>
+                    </div>
+                {% endif %}
+                <div class="clearfix"></div>
             </div>
 
         {% endfor %}
