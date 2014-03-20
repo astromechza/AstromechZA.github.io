@@ -1,16 +1,9 @@
-# This is the default format.
-# For more see: http://jekyllrb.com/docs/permalinks/
-permalink: /:categories/:year/:month/:day/:title
+
+permalink: date
 
 exclude: [".gitignore", ".ruby-version", "README.md", "Gemfile", "Gemfile.lock"]
+
 pygments: true
 
 title : AstromechZA
 tagline: My Mind on Code
-author :
-  name : Ben Meier
-  email : benmeier42+github@gmail.com
-  github : AstromechZA
-  twitter : benmeier_
-
-production_url : http://astromechza.github.io
