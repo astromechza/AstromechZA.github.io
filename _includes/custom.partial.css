@@ -100,3 +100,36 @@ a:visited {
 .postnavlinks {
     padding-top:50px;
 }
+
+table.highlighttable {
+    width: 100%;
+}
+
+table.highlighttable td.linenos {
+    width: 40px;
+}
+
+table.highlighttable .linenos pre {
+    word-break: normal;
+    background: #eee;
+    border: none;
+    border-radius: 0px;
+    padding-right: 5px;
+    color: #666;
+    margin-bottom: 0px;
+}
+
+table.highlighttable .code pre {
+    border-radius: 0px 3px 3px 0px;
+    border: none;
+    padding-left: 10px;
+    border-left-width: 0px;
+    margin-bottom: 0px;
+}
+
+.codediv {
+    overflow-x: auto;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}

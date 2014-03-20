@@ -12,7 +12,7 @@ Prerequisites:
 
 ### 1) Basic setup
 Create Jekyll project
-{% highlight bash %}
+{% highlight bash linenos=table %}
 $ mkdir blog && cd blog
 $ echo "source 'http://rubygems.org'\n\ngem 'jekyll'" > Gemfile
 $ bundle install
@@ -21,7 +21,7 @@ $ bundle install
 Now you can test the website using ```$ bundle exec jekyll serve``` at any time.
 
 Create a '\_config.yml' containing:
-{% highlight yaml %}
+{% highlight yaml linenos=table %}
 # website title & tagline
 title : A Simple Blog
 tagline: Using Jekyll
@@ -44,7 +44,7 @@ Create some important directories
 The index page will be the default page users see when they view the blog
 
 Create an index page. We could do it like the following:
-{% highlight html %}
+{% highlight html linenos=table %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +59,7 @@ index page
 But instead, lets take advantage of Layouts:
 
 ```_layouts/default.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,7 +72,7 @@ But instead, lets take advantage of Layouts:
 {% endhighlight %}
 
 ```index.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 ---
 layout: default
 ---
@@ -83,7 +83,7 @@ index page
 
 ### 3) Add in some bootstrap
 ```_layouts/default.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,19 +110,19 @@ index page
 {% endhighlight %}
 
 ```css.partial.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 {% endhighlight %}
 
 ```js.partial.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 {% endhighlight %}
 
 ```nav.partial.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 <div class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container narrow-container">
         <div class="navbar-header">
@@ -150,7 +150,7 @@ index page
 To make testing easier lets make 2 test posts. Create 2 files in the ```_posts/``` directory. Because the file names end in '.md', we can use simple markdown formatting.
 
 ```_posts/2014-01-01-test-post-one.md```
-```
+{% highlight text linenos=table %}
 ---
 layout: default
 title: Test Post One
@@ -158,10 +158,10 @@ title: Test Post One
 
 Test content number one
 
-```
+{% endhighlight %}
 
 ```_posts/2014-01-02-test-post-two.md```
-```
+{% highlight text linenos=table %}
 ---
 layout: default
 title: Test Post Two
@@ -169,13 +169,13 @@ title: Test Post Two
 
 Test content number two
 
-```
+{% endhighlight %}
 
 <br>
 
 ### 5) List them in the index page
 ```index.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 ---
 layout: default
 title: Home
@@ -197,7 +197,7 @@ We want to add a bit more formatting. Specifically, links to next/previous posts
 Jekyll is capable of nested layouts, so we can create a ```post``` layout that inherits the ```default``` layout:
 
 ```_layouts/post.html```
-{% highlight html %}
+{% highlight html linenos=table %}
 ---
 layout: default
 ---
