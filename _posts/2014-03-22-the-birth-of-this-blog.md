@@ -20,6 +20,8 @@ What I really like is that I can use Git to modify and maintain the website, I c
 
 This is by no means my first tech related blog, my other blog is still hosted here: [benmeier.co.za](http://benmeier.co.za)
 
+Edit: Because its hosted in a github repo and processed via Jekyll ON github, I can add posts from the repository view on Github with no complications. Awesome.
+
 ~
 
 On a random note, this was the view from Chapmans Peak Drive on Friday:
