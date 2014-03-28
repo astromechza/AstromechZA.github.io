@@ -133,3 +133,13 @@ table.highlighttable .code pre {
     border-radius: 3px;
     margin-bottom: 10px;
 }
+
+.post-link {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.post-link.list-group-item {
+    padding: 6px 10px;
+}

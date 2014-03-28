@@ -4,7 +4,7 @@ title: Home
 ---
 <div class="row">
     <div class="col-md-8">
-        <h4>Latest Post:</h4>
+        <h4><em>Latest Post:</em></h4>
         {% for post in site.posts limit:1 %}
 
             <div class="page-header">
@@ -32,7 +32,7 @@ title: Home
         <div class="list-group">
             <div class="list-group-item active">Posts:</div>
             {% for post in site.posts %}
-                <a href="{{ post.url }}" class="list-group-item">{{ post.date | date_to_string}} <small>{{ post.title }}</small></a>
+                <a href="{{ post.url }}" class="post-link list-group-item">{{ post.date | date_to_string}} <small>{{ post.title }}</small></a>
             {% endfor %}
         </div>
     </div>
