@@ -30,7 +30,7 @@ body {
     color: {{ page.green_4 }};
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-    color: {{ page.green_4 }};
+    color: c;
     background-color: {{ page.green_5 }};
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
@@ -83,8 +83,8 @@ a:visited {
 }
 
 .list-group-item.active {
-    background-color: {{ page.green_5 }};
-    color: #fff;
+    background-color: {{ page.green_6 }};
+    color: {{ page.green_0 }};
 }
 
 .post-content img {
