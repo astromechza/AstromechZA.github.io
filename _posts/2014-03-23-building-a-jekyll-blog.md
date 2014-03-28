@@ -7,6 +7,7 @@ date: 2014-03-23 18:04:10
 This will be a purely functional tutorial, just a barebones blog.
 
 Prerequisites:
+
 - Jekyll Gem (```gem install jekyll```) either via Gemfile or system.
 
 
