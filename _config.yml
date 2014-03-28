@@ -7,3 +7,5 @@ pygments: true
 
 title : AstromechZA
 tagline: My Mind on Code
+
+markdown: kramdown

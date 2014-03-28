@@ -55,6 +55,7 @@ The files for the extension show some Javascript files plus a few resources (ima
 {% endhighlight %}
 
 Important things to note:
+
 - It has a blank background script, thankfully this means it doesn’t do anything out of sight.
 - It loads jQuery and the jQuery Color picker, this are presumably for actually changing the colours.
 - Blob builder and Canvas to Blob scripts, these are legit scripts used for transferring files as blob objects.
@@ -65,9 +66,10 @@ Important things to note:
 
 ## Analysing content.js
 
-content.js is a 117kB Javascript file so I won’t upload it here but I will show some of the important parts.
+```content.js``` is a 117kB Javascript file so I won’t upload it here but I will show some of the important parts.
 
 The process starts off innocently enough:
+
 - Create some local storage for the chosen colours
 - Apply the embedded css to the page (the css lines take up most of the 1000 lines)
 - Add some html for the colour picker and set its events to store new colours and reload the page
@@ -79,6 +81,7 @@ PluginVar.doShit();
 {% endhighlight %}
 
 What this code does:
+
 1. Load more settings from another AmazonAWS hosted json page.  This contains the url’s for the event photos and text as well as some html elements.
 1. Inject jQuery if this is not yet injected
 1. Inject a hit counter image

@@ -249,6 +249,7 @@ Post two:
 Now you can create a pretty beastly blog by adding content, styles, and leveraging the rest of Boostrap and Jekyll.
 
 Helpful links:
+
 - Jekyll homepage <http://jekyllrb.com/>
 - Bootstrap docs <http://getbootstrap.com/css/>
 - How to host a Jekyll site on github pages <https://help.github.com/articles/using-jekyll-with-pages>
