@@ -165,3 +165,13 @@ blockquote:before {
   margin-right: 0.25em;
   vertical-align: -0.4em;
 }
+
+.navbar-brand img {
+    height: 30px;
+    margin-top: -4px;
+    margin-right: 10px;
+    border:1px solid #;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
