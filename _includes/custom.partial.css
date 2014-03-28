@@ -175,3 +175,8 @@ blockquote:before {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
+
+a.navbar-brand:hover img {
+    opacity: 0.5;
+    filter: alpha(opacity=40);
+}
