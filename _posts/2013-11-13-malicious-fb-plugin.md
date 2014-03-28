@@ -8,7 +8,7 @@ The photo looked like this:
 
 ![FB1](/assets/img/fb1.jpg)
 
-The tagged photoAs you can see, it advertises a pretty shiny Facebook conversion tool and asks people to click the link. Some things to note: The layout of Facebook in the image is not current, it is definitely an old layout from before Timeline.
+The tagged photo advertises a pretty shiny Facebook conversion tool and asks people to click the link. Some things to note: The layout of Facebook in the image is not current, it is definitely an old layout from before Timeline.
 
 Clicking on the link (Incognito mode!) takes you to this page:
 
