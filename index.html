@@ -1,28 +1,50 @@
 ---
-layout: default
 title: Home
 ---
 
-<div class="row">
-    {% for post in site.posts limit:1 %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
 
-        <div class="page-header">
-            <h2><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date: "%-d %B %Y" }}</small></h2>
-        </div>
+    <title>{{ site.title }} : {{ page.title }}</title>
 
-        <div class="post-content front-page">
-            {{ post.content }}
-        </div>
+    {% include css.partial.html %}
 
-        <div class="postnavlinks">
-            <div class="clearfix"></div>
-            {% if post.previous.url %}
-                <div class="pull-left">
-                    <a href="{{ post.previous.url }}"><i class="fa fa-arrow-left"></i> {{ post.previous.title }} [older]</a>
-                </div>
-            {% endif %}
-            <div class="clearfix"></div>
-        </div>
+    {% include js.partial.html %}
+</head>
+<body>
 
-    {% endfor %}
-</div>
+    {% include nav.partial.html %}
+
+    <div class="container narrow-container content-container">
+        {% for post in site.posts limit:1 %}
+
+            <div class="page-header">
+                <h2><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date: "%-d %B %Y" }}</small></h2>
+            </div>
+
+            <div class="post-content front-page">
+                {{ post.content }}
+            </div>
+
+            <div class="postnavlinks">
+                <div class="clearfix"></div>
+                {% if post.previous.url %}
+                    <div class="pull-left">
+                        <a href="{{ post.previous.url }}"><i class="fa fa-arrow-left"></i> {{ post.previous.title }} [older]</a>
+                    </div>
+                {% endif %}
+                <div class="clearfix"></div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+    {% include footer.partial.html %}
+    {% include analytics.partial.html %}
+</body>
+</html>
