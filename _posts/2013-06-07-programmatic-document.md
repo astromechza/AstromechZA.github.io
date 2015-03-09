@@ -43,6 +43,7 @@ pdf.ln(10)
 pdf.multi_cell(0, 5, text)
 {% endhighlight %}
 
+
 This generates a document that looks like this:
 ![PDF Sample](/assets/img/screenshot.13.jpg)
 

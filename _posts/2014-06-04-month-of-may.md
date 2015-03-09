@@ -29,11 +29,14 @@ It uses their v3 API throughout.
 While attempting to work out why our internet connection was getting such high latency
 and low bandwidth, I developed a Python program for logging traffic statistics from my Netgear
 router and for pinging hosts. The results were then graphed using good ol' Highcharts.
+
 ![screenshot21](http://i1242.photobucket.com/albums/gg534/AstromechZA/astromechza-github-io/screenshot21.jpg)
 
 
 ### Project work
 Last night I got some good work done on my part of the honours project: Octree mesh splitting.
 To check that I am reading PLY files correctly I can render them as split-view blueprints:
+
 ![blueprint](http://i1242.photobucket.com/albums/gg534/AstromechZA/astromechza-github-io/Chapel-1.png)
+
 Kinda fun!
