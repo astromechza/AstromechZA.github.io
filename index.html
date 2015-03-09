@@ -1,38 +1,28 @@
 ---
-layout: default_wide
+layout: default
 title: Home
 ---
+
 <div class="row">
-    <div class="content-column col-md-8">
-        {% for post in site.posts limit:1 %}
+    {% for post in site.posts limit:1 %}
 
-            <div class="page-header">
-                <h2><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date: "%-d %B %Y" }}</small></h2>
-            </div>
-
-            <div class="post-content front-page">
-                {{ post.content }}
-            </div>
-
-            <div class="postnavlinks">
-                <div class="clearfix"></div>
-                {% if post.previous.url %}
-                    <div class="pull-left">
-                        <a href="{{ post.previous.url }}"><i class="fa fa-arrow-left"></i> {{ post.previous.title }} [older]</a>
-                    </div>
-                {% endif %}
-                <div class="clearfix"></div>
-            </div>
-
-        {% endfor %}
-    </div>
-    <div class="col-md-4">
-
-        <div class="list-group">
-            <div class="list-group-item header">Posts:</div>
-            {% for post in site.posts %}
-                <a href="{{ post.url }}" class="post-link list-group-item">{{ post.date | date_to_string}} <small>{{ post.title }}</small></a>
-            {% endfor %}
+        <div class="page-header">
+            <h2><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date: "%-d %B %Y" }}</small></h2>
         </div>
-    </div>
+
+        <div class="post-content front-page">
+            {{ post.content }}
+        </div>
+
+        <div class="postnavlinks">
+            <div class="clearfix"></div>
+            {% if post.previous.url %}
+                <div class="pull-left">
+                    <a href="{{ post.previous.url }}"><i class="fa fa-arrow-left"></i> {{ post.previous.title }} [older]</a>
+                </div>
+            {% endif %}
+            <div class="clearfix"></div>
+        </div>
+
+    {% endfor %}
 </div>

@@ -7,7 +7,7 @@ date: 2015-03-09 10:00:00
 This post covers the creation of [whereismypower.co.za](http://whereismypower.co.za), a load shedding schedule website I developed as a side project. 
 
 - 25,057 page views over 3 months
-- R99 total cost (excluding free credits)
+- R 99 total cost (excluding free credits)
 
 --------------------
 
