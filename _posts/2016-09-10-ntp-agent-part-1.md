@@ -60,20 +60,21 @@ At the time of writing:
 - za.pool.ntp.org had 21
 
 I'm going to be using the `za` pool for my experiments, just to keep latency
-down, but it should be completely configurable. ntp.org allows you to address
-the pool using the four domains `{0,1,2,3}.za.pool.ntp.org`.
+down, but it should be completely configurable.
 
-Each of the addresses that those domains resolve to is listening on the NTP port
-`123` for UDP packets. It's great that NTP uses UDP since this makes writing
-a client *much* easier than a TCP protocol.
+ntp.org allows you to address the pool using the four domains `{0,1,2,3}.za.pool.ntp.org`.
+The DNS lease changes quite frequently as the available servers in the pool are chosen for duty.
+Each of the servers that those domains resolve to is listening on the NTP port
+`123` for NTP packets.
 
 The best description of the NTP protocol I could find was this
 [90 page PDF](https://www.eecis.udel.edu/~mills/database/reports/ntp4/ntp4.pdf).
 Pretty heavy reading, but the most reliable source I could find that had
 text, diagrams, and sample source code for the algorithms.
 
+ It's great that NTP uses UDP since this makes writing a client *much* easier than a TCP protocol.
 The simplest UDP client packet that can be sent is almost completely zeroes. The
-ownly filled in fields of the 48 byte packet are the 3-bit version and 3-bit mode
+only filled in fields of the 48 byte packet are the 3-bit version and 3-bit mode
 at the start. This outgoing packet will get a little more filled in later. But
 this is the minimum required to get a response from an NTP server.
 
