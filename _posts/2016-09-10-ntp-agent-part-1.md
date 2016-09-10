@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Building an NTP agent : Part 1
+title: Building an NTP agent - Part 1
 date: 2016-09-10 11:01:40
 ---
 
