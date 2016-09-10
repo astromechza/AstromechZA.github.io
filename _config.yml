@@ -3,7 +3,7 @@ permalink: date
 
 exclude: [".gitignore", ".ruby-version", "README.md", "Gemfile", "Gemfile.lock"]
 
-highlighter: pygments
+highlighter: rouge
 
 title : AstromechZA
 tagline: My Mind on Code

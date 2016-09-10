@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Building an NTP agent : Part 1
-date: 2016-09-10 10:00:00
+date: 2016-09-10 11:01:40
 ---
 
 My home/media server has a small Grafana instance with a [Spoon](http://github.com/AstromechZA/spoon)
@@ -67,10 +67,10 @@ Each of the addresses that those domains resolve to is listening on the NTP port
 `123` for UDP packets. It's great that NTP uses UDP since this makes writing
 a client *much* easier than a TCP protocol.
 
-The best description of the NTP protocol I could find was this 90 page PDF
-https://www.eecis.udel.edu/~mills/database/reports/ntp4/ntp4.pdf. Pretty heavy
-reading, but the most reliable source I could find that had both text, diagrams,
-and sample source code for the algorithms.
+The best description of the NTP protocol I could find was this
+[90 page PDF](https://www.eecis.udel.edu/~mills/database/reports/ntp4/ntp4.pdf).
+Pretty heavy reading, but the most reliable source I could find that had
+text, diagrams, and sample source code for the algorithms.
 
 The simplest UDP client packet that can be sent is almost completely zeroes. The
 own filled in fields of the 48 byte packet are the 3-bit version and 3-bit mode
