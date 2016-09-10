@@ -78,7 +78,7 @@ at the start. This outgoing packet will get a little more filled in later. But
 this is the minimum required to get a response from an NTP server.
 
 ```
-00 011 011 0000000000....000
+00 100 011 0000000000....000
    --- ---
 ```
 
@@ -98,7 +98,7 @@ func getNTP(server string) (*[]byte, error) {
     defer conn.Close()
 
     buf := make([]byte, 48)
-    buf[0] = 0x1B
+    buf[0] = 0x23
     _, err = conn.Write(buf)
     if err != nil { return nil, err }
 
@@ -121,14 +121,15 @@ func getNTP(server string) (*[]byte, error) {
     }
 ```
 
-Net us:
+Nets us:
 
 ```
 $ ./ntp-blog 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
-1c0305ed00002c4900000f3b10a1d288db7e4a1c26d5d5e20000000000000000db7e4dd48ca0ebd1db7e4dd48cabb83e
-1c0300ec0000014000000644294e8011db7e4daf22d3e5e60000000000000000db7e4dd498cd5e82db7e4dd498cdf83a
-1c0203eb00000058000008e32949280bdb7e4a8d7d2e3c0d0000000000000000db7e4dd4a37d57cbdb7e4dd4a37ee3be
-1c0303e80000362700001505c550447bdb7e46800def4dd30000000000000000db7e4dd4af70612cdb7e4dd4af7380ad
+240203ed00000000000002d67f7f0100db7e4f188fc8c3d00000000000000000db7e4f229dafd5d5db7e4f229dbda7f0
+240203e90000066b000004b0c415bb02db7e4eda5d8d01850000000000000000db7e4f23cf980d0edb7e4f23cfa11750
+240203e9000003a500000fabc415bb02db7e47a34ad22a210000000000000000db7e4f2410516b24db7e4f241062d562
+240303e80000361700000a93c550447bdb7e4e9c7d8d8d450000000000000000db7e4f24f2920ab3db7e4f24f2955cfa
 ```
 
 Seems legit. Next is parsing those responses.
+
