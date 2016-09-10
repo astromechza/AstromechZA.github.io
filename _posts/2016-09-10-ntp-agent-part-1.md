@@ -73,7 +73,7 @@ Pretty heavy reading, but the most reliable source I could find that had
 text, diagrams, and sample source code for the algorithms.
 
 The simplest UDP client packet that can be sent is almost completely zeroes. The
-own filled in fields of the 48 byte packet are the 3-bit version and 3-bit mode
+ownly filled in fields of the 48 byte packet are the 3-bit version and 3-bit mode
 at the start. This outgoing packet will get a little more filled in later. But
 this is the minimum required to get a response from an NTP server.
 
@@ -85,3 +85,50 @@ this is the minimum required to get a response from an NTP server.
 For more details of what all the fields mean look at page 11 and 43 of the
 pdf.
 
+A quick client in Golang to send an NTP request to multiple upstream servers:
+
+```golang
+func getNTP(server string) (*[]byte, error) {
+    svrAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", server, 123))
+    if err != nil { return nil, err }
+
+    conn, err := net.DialUDP("udp", nil, svrAddr)
+    if err != nil { return nil, err }
+
+    defer conn.Close()
+
+    buf := make([]byte, 48)
+    buf[0] = 0x1B
+    _, err = conn.Write(buf)
+    if err != nil { return nil, err }
+
+    inbuf := make([]byte, 1024)
+    n, _, err := conn.ReadFromUDP(inbuf)
+    if err != nil { return nil, err }
+    response := inbuf[:n]
+    return &response, nil
+}
+
+...
+
+    for _, server := range flag.Args() {
+        r, err := getNTP(server)
+        if err != nil {
+            fmt.Println(err.Error())
+        } else {
+            fmt.Printf("%x\n", *r)
+        }
+    }
+```
+
+Net us:
+
+```
+$ ./ntp-blog 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
+1c0305ed00002c4900000f3b10a1d288db7e4a1c26d5d5e20000000000000000db7e4dd48ca0ebd1db7e4dd48cabb83e
+1c0300ec0000014000000644294e8011db7e4daf22d3e5e60000000000000000db7e4dd498cd5e82db7e4dd498cdf83a
+1c0203eb00000058000008e32949280bdb7e4a8d7d2e3c0d0000000000000000db7e4dd4a37d57cbdb7e4dd4a37ee3be
+1c0303e80000362700001505c550447bdb7e46800def4dd30000000000000000db7e4dd4af70612cdb7e4dd4af7380ad
+```
+
+Seems legit. Next is parsing those responses.
