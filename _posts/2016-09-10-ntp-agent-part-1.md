@@ -133,3 +133,185 @@ $ ./ntp-blog 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
 
 Seems legit. Next is parsing those responses.
 
+### 2. Parsing an NTP packet
+
+UDP packets are meant to be as small and reliable as possible and so are
+usually packed very densely with information. NTP packets are no different.
+
+The basic 48 byte packet for both the client and the server looks like the
+following:
+
+![NTP strata](/assets/img/2016-09-10/packetfmt.png)
+
+So we just have to setup a data structure (`RawPacket`) and some methods to
+encode and decode it to the same 48 byte format.
+
+```golang
+type RawPacket struct {
+    LeapIndicator byte
+    Version byte
+    Mode byte
+    Stratum byte
+    Poll byte
+    Precision byte
+    RootDelay int32
+    RootDispersion int32
+    ReferenceID int32
+    ReferenceTimestamp int64
+    OriginateTimestamp int64
+    ReceiveTimestamp int64
+    TransmitTimestamp int64
+}
+```
+
+I'm not going to write all the code inline here. Just capture some of the
+important bits. Anything else I'll link to afterwards in the repo for the
+project.
+
+```golang
+func ParseRawPacket(input *[]byte) (*RawPacket, error) {
+    inputData := *input
+
+    // check incoming data length
+    if len(inputData) != 48 {
+        return nil, errors.New("Incoming packet must be 48 bytes")
+    }
+
+    // build output structure
+    output := RawPacket{}
+
+    // first byte
+    b1 := inputData[0]
+    output.LeapIndicator = (b1 >> 6) & 0x2
+    output.Version = (b1 >> 3) & 0x7
+    output.Mode = b1 & 0x7
+
+    // next 3 bytes
+    output.Stratum = inputData[1]
+    output.Poll = inputData[2]
+    output.Precision = inputData[3]
+
+    // remaining components
+    var err error
+    output.RootDelay, err = getInt32(input, 4)
+    if err != nil { return nil, err }
+    output.RootDispersion, err = getInt32(input, 8)
+    if err != nil { return nil, err }
+    output.ReferenceID, err = getInt32(input, 12)
+    if err != nil { return nil, err }
+    output.ReferenceTimestamp, err = getInt64(input, 16)
+    if err != nil { return nil, err }
+    output.OriginateTimestamp, err = getInt64(input, 24)
+    if err != nil { return nil, err }
+    output.ReceiveTimestamp, err = getInt64(input, 32)
+    if err != nil { return nil, err }
+    output.TransmitTimestamp, err = getInt64(input, 40)
+    if err != nil { return nil, err }
+
+    return &output, nil
+}
+
+func getInt32(input *[]byte, position int) (int32, error) {
+    ...
+}
+
+func getInt64(input *[]byte, position int) (int64, error) {
+    ...
+}
+```
+
+Our struct prints quite reliably now:
+
+```
+$ ./ntp-blog 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
+{0 4 4 3 3 232 13866 5338 -984595333 -2630542190490089860 0 -2630535662870812375 -2630535662870604122}
+{0 4 4 2 3 234 2102 3176 -1005208830 -2630538858014520027 0 -2630535662636034478 -2630535662635204098}
+{0 4 4 3 0 236 320 1342 693010449 -2630535707210498351 0 -2630535662448759907 -2630535662448722089}
+{0 4 4 2 3 233 3013 1404 3967938 -2630536493219449208 0 -2630535662258047584 -2630535662257932277}
+```
+
+### 3. Building a Time object from the 64bit NTP timestamp
+
+The final part of this post is extracting the actual Time value that the NTP
+server is transmitting. The format it uses is fairly interesting:
+
+> The 64-bit timestamp format is used in packet headers and other places with limited word size. It
+includes a 32-bit unsigned seconds field spanning 136 years and a 32 bit fraction field resolving
+232 picoseconds.
+
+I borrowed this technique of doing it from Apache commans library:
+[net/ntp/TimeStamp.java](http://svn.apache.org/viewvc/commons/proper/net/trunk/src/main/java/org/apache/commons/net/ntp/TimeStamp.java?view=markup)
+
+```golang
+const intMask = 0xFFFFFFFF
+const era1900 = -2208988800
+const era2036 = 2085978496
+const nanosecondsPerSecond = 1e9
+
+func ConvertNTPToSeconds(input int64) float64 {
+    // first convert to unsigned
+    uinput := uint64(input)
+
+    // get integral seconds
+    seconds := (uinput >> 32) & intMask
+    // isolate fractions
+    fraction := (uinput & intMask)
+    // convert into seconds
+    extra := float64(fraction) / float64(0x100000000)
+    accumulated := float64(seconds) + extra
+
+    // pull the MSB of the seconds
+    // if this is set then we are in the next "era"
+    msb := seconds & 0x80000000
+
+    // combine with magic offset time depending on the era
+    if msb == 0 {
+        // after year 2036
+        return accumulated + era2036
+    }
+    // after year 1900
+    return accumulated + era1900
+}
+
+func ConvertSecondsToTime(input float64) time.Time {
+    // pull out the seconds and fractional seconds
+    seconds, frac := math.Modf(math.Abs(input))
+    // convert to nanoseconds and build
+    return time.Unix(int64(seconds), int64(frac * float64(nanosecondsPerSecond)))
+}
+
+func ConvertNTPToTime(input int64) time.Time {
+    // all together now
+    return ConvertSecondsToTime(ConvertNTPToSeconds(input))
+}
+```
+
+So now we can print out the transmit time stamps of the incoming packets!
+
+```
+$ ./ntp-blog 0.za.pool.ntp.org 1.za.pool.ntp.org 2.za.pool.ntp.org 3.za.pool.ntp.org
+{0 4 4 2 3 233 1637 1612 -1005208830 -2630533090589107248 0 -2630530882002116997 -2630530882001927291}
+2016-09-10 14:24:57.592065811 +0200 SAST
+{0 4 4 2 3 234 205 135 692805679 -2630530984411593606 0 -2630530878018216308 -2630530878018054843}
+2016-09-10 14:24:58.519639968 +0200 SAST
+{0 4 4 2 3 232 14465 2045 -1071249424 -2630534685670322021 0 -2630530876233854186 -2630530876233641078}
+2016-09-10 14:24:58.935093879 +0200 SAST
+{0 4 4 2 3 237 0 718 2139029760 -2630530886426329555 0 -2630530875228689786 -2630530875227833139}
+2016-09-10 14:24:59.169126987 +0200 SAST
+```
+
+If you wanted to, you could stop here. Just pick one or average them out, and
+set your system clock. If your server is out by multiple minutes and you just
+want to get things close enough, this would be perfectly fine for you.
+
+The problem is that in complex network environments like the internet, packets
+take time, might never arrive, could be arbitrarily delayed, could be maliciously
+constructed or highjacked; the remote NTP server might even be completely wrong
+or send pure garbage back to you. How you do handle all of these conditions
+intelligently? Sure, some basic heuristics about how far you're allowed to change
+the clock and by how much could help, but when you want to synchronise clocks
+down to the microsecond level or lower you probably need something a bit more
+complex.
+
+Part 2 of this post will take up the challenge of looking at the core algorithms
+in NTP for determining the true time.
