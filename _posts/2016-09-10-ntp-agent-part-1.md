@@ -303,7 +303,21 @@ $ ./ntp-blog 0.za.pool.ntp.org 1.za.pool.ntp.org 2.za.pool.ntp.org 3.za.pool.ntp
 
 If you wanted to, you could stop here. Just pick one or average them out, and
 set your system clock. If your server is out by multiple minutes and you just
-want to get things close enough, this would be perfectly fine for you.
+want to get things close enough, this would be perfectly fine for you. The
+`ntp4.pdf` document linked earlier suggests this as a minimum implementation
+of an SNTPv4 Client.
+
+> 11.2 SNTPv4 Client Configuration
+There is a wide spectrum of SNTPv4 client configurations, with each providing
+different levels of accuracy and reliability. Since only local client
+applications are supported, to use or not use one or more of the NTPv4
+algorithms is a matter of local choice. As a bare minimum, a SNTPv4 client
+application constructs a packet with only the version number filled in and sends
+it to the NTPv4 or SNTPv4 server. The server operates as in the previous section
+to return the packet, but only the transmit timestamp (T3) is useful. The SNTPv4
+client application converts from NTP timestamp format to system time format,
+sets the system clock to this value and exits. The application can be called at
+defined intervals or manually.
 
 The problem is that in complex network environments like the internet, packets
 take time, might never arrive, could be arbitrarily delayed, could be maliciously
@@ -314,5 +328,5 @@ the clock and by how much could help, but when you want to synchronise clocks
 down to the microsecond level or lower you probably need something a bit more
 complex.
 
-Part 2 of this post will take up the challenge of looking at the core algorithms
-in NTP for determining the true time.
+Part 2 of this post will take up the challenge of looking at building a more
+accurate SNTPv4 Client.
