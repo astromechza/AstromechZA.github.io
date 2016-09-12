@@ -305,9 +305,9 @@ If you wanted to, you could stop here. Just pick one or average them out, and
 set your system clock. If your server is out by multiple minutes and you just
 want to get things close enough, this would be perfectly fine for you. The
 `ntp4.pdf` document linked earlier suggests this as a minimum implementation
-of an SNTPv4 Client.
+of an SNTPv4 Client:
 
-> 11.2 SNTPv4 Client Configuration
+> 11.2 SNTPv4 Client Configuration:
 There is a wide spectrum of SNTPv4 client configurations, with each providing
 different levels of accuracy and reliability. Since only local client
 applications are supported, to use or not use one or more of the NTPv4
@@ -328,5 +328,5 @@ the clock and by how much could help, but when you want to synchronise clocks
 down to the microsecond level or lower you probably need something a bit more
 complex.
 
-Part 2 of this post will take up the challenge of looking at building a more
-accurate SNTPv4 Client.
+[Part 2](http://astromechza.github.io/2016/09/11/ntp-agent-part-2.html) of this
+post will take up the challenge of looking at building a more accurate SNTPv4 Client.
