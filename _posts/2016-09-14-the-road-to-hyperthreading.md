@@ -48,7 +48,7 @@ This was first used around 1940 but became very useful in the late 1970's in
 supercomputers dedicated to vector and array processing. You can see how needing
 to perform the same operation on a number of items can leverage pipelining.
 
-#### 3. [Superscalar](https://en.wikipedia.org/wiki/Superscalar_processor)] CPUs
+#### 3. [Superscalar](https://en.wikipedia.org/wiki/Superscalar_processor) CPUs
 
 The next step up from pipelining is superscalar architectures. Instead of having
 single copies of each execution unit, a superscalar CPU has multiple ALUs, FPUs,
@@ -121,9 +121,21 @@ hyperthreading, while i7 CPUs commonly have 4 or even 6 cores along with hyperth
 Sadly, my Macbook Pro has the i7-4558U which despite a great clock speed and
 cache size, only has 2 cores with hyperthreading.
 
+### Impact on cloud VM providers
+
+Cloud providers offering VM (virtual machine)'s, commonly use Intel Xeon processors.
+A recently released Xeon processor offers 18 cores with hyperthreading for a total of 36
+"threads" or virtual cores. In the operating system each of these 26 threads
+can be allocated to so each one appears as a distinct processor when you run
+`cat /proc/cpuinfo` or similar. When launching VM's it's important to realise
+that unless you are strictly pairing the hyperthreaded cpus together, you may
+have 2 customers that share a single physical cpu between their VMs which means
+that a workload in one VM may impact the other VM.
+
+
 #### Other useful links that may explain things better
 
-- http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm
-- https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput
-- https://bitsum.com/pl_when_hyperthreading_hurts.php
-- http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115
+- [](http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm)
+- [](https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput)
+- [](https://bitsum.com/pl_when_hyperthreading_hurts.php)
+- [](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
