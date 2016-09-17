@@ -141,4 +141,4 @@ that a workload in one VM may impact the other VM.
 - [http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm](http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm)
 - [https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput](https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput)
 - [https://bitsum.com/pl_when_hyperthreading_hurts.php](https://bitsum.com/pl_when_hyperthreading_hurts.php)
-- [http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
+- [http://www.gamedev.net/page/resources/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
