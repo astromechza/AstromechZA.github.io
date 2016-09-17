@@ -104,6 +104,9 @@ degrade performance overall.
 CPU's over the years have become very advanced in order to reorder-instructions
 and predict and mitigate potential performance stalls.
 
+I should really try and record a video explaining this on paper.. it's a lot
+easier that way..
+
 ### What this comes down to:
 
 *Hyperthreading is a marketing misnomer* - kinda. It's all too common now for
@@ -125,8 +128,8 @@ cache size, only has 2 cores with hyperthreading.
 
 Cloud providers offering VM (virtual machine)'s, commonly use Intel Xeon processors.
 A recently released Xeon processor offers 18 cores with hyperthreading for a total of 36
-"threads" or virtual cores. In the operating system each of these 26 threads
-can be allocated to so each one appears as a distinct processor when you run
+"threads" or virtual cores. In the operating system each of these 36 threads
+can be allocated work so each one appears as a distinct processor when you run
 `cat /proc/cpuinfo` or similar. When launching VM's it's important to realise
 that unless you are strictly pairing the hyperthreaded cpus together, you may
 have 2 customers that share a single physical cpu between their VMs which means
