@@ -166,7 +166,7 @@ backspace to delete and rewrite printed characters.
 
 Example in Python:
 
-```
+```python
 import sys
 import time
 
@@ -194,7 +194,38 @@ output when piping it into a file, or further processing.
 It's always a horrible experience reading through a log file containing sudden
 ANSI codes.
 
-### 9. If environment variables are affecting the execution, TELL THE USER
+### 9. Detecting the terminal size
+
+Editors like `vi`, `nano` etc expand to fill the full size of the terminal, they
+do this by using ANSI control codes to clear the screen and to write characters
+at arbitrary positions.
+
+You might also find useful moments to use the width of the terminal as a limit
+for things like progress bars or tables.
+
+Some terminals provide the `$LINES` and `$COLS` variables, other tools use the
+`SIGWINCH` signal that indicates that the terminal was resized. Other languages
+can use their own libraries to extract this information:
+
+```python
+import fcntl
+import termios
+import struct
+import errno
+
+def terminal_size(default_width=100, default_height=50):
+    try:
+        h, w, hp, wp = struct.unpack('HHHH', fcntl.ioctl(1, termios.TIOCGWINSZ, struct.pack('HHHH', 0, 0, 0, 0)))
+        return w, h
+    except IOError as e:
+        if e.errno == errno.ENOTTY:
+            return default_width, default_height
+        raise
+```
+
+Again, remember that this only makes sense in a TTY interface.
+
+### 10. If environment variables are affecting the execution, TELL THE USER
 
 Something else that is a pet peeve of mine is scripts that use an environment
 variable to silently change the way they operate. It's really useful for it to
