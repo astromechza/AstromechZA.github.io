@@ -64,6 +64,39 @@ Remember that if you're doing structure output, you can't intefere with it by
 printing status messages or progress alerts to `stdout`, you'll need to push
 everything to `stderr`.
 
+For example, if the normal output is:
+
+```
+Animal              Legs
+Lion                4
+Ostrich             2
+Spider              8
+```
+
+Then a structured output could be:
+
+```
+animal,legs
+Lion,4
+Ostrich,2
+Spider,8
+```
+
+Or
+
+```
+{"animal": "Lion", "legs": 4}
+{"animal": "Ostrich", "legs": 2}
+{"animal": "Spider", "legs": 8}
+```
+
+#### 1.4 If you take a file as input, consider also accepting `-`
+
+Quite a few tools accept `-` as an alias for `stdin` when they take a file as
+input (for example `vi -` will open a file containing the information from
+`stdin` stream). Consider supporting this as well so that users can pipe
+content to your executable.
+
 ### 2. Don't exit with code 0 if there's an error!
 
 This is critical. If you exit normally when an error occurs, a script that calls
@@ -108,7 +141,7 @@ TEMPORARY: could not open file "/bob/john"
 PERMANENT: cannot open file "!*&^*!&#$"
 ```
 
-**Always** include a suggestion of how the user can remediate it:
+For invalid values, mention *why* and *how* it was invalid:
 
 ```
 BAD:    value was out of range
@@ -116,6 +149,16 @@ BETTER: value 10532 was out of range [0 -> 100]
 BETTER: could not parse "837af" as integer
 BETTER: expected Integer argument, got String
 ```
+
+Consider adding suggestions:
+
+```
+An error occured, the file '/something/else' was not readable. Make sure you
+have the correct permissions to read it.
+```
+
+It may be longer, but it certainly provides much more useful information for a
+user.
 
 ### 5. You can do some great things with ANSI control codes
 
@@ -157,6 +200,9 @@ And almost anything you'd like if you're allowed to use unicode. Remember that
 these character encodings aren't supported by all terminals on all platforms and
 that other tools like `grep` may not work correctly with multi-byte characters.
 
+Also remember that it makes although it might make your output prettier, it
+will intefere with people processing the output using `cut`/`awk`/`sed` etc..
+
 ### 7. Character rewriting and progress bars
 
 Quite a few utilities like `curl`, `wget` etc.. use progress bars to convey the
@@ -183,6 +229,10 @@ sys.stdout.write("\r")
 sys.stdout.write("#" * width)
 sys.stdout.write(" 100.0%\n")
 ```
+
+**Be aware** that the backspaces don't have any effect when you're not in a
+p/tty environment! This is why piping a progress bar ends up with hundreds of
+lines of intermediate progress. See the next point on how to avoid this!
 
 ### 8. Detect P/TTY vs dumb environment
 
