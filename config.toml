@@ -1,6 +1,6 @@
 baseURL = "https://astromechza.github.io/"
 languageCode = "en-us"
-title = "AstromechZA - My Mind on Code"
+title = "AstromechZA"
 theme = "kiera"
 
 copyright = "Copyright &copy; 2018 - Ben Meier"
@@ -13,5 +13,8 @@ pygmentsCodeFences = true
 
 [author]
     name = "Ben Meier"
-    github = "github.com/AstromechZA"
+    github = "AstromechZA"
     twitter = "@benmeier_"
+
+[params]
+    tagline = "My Mind on Code"
