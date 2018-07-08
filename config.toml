@@ -10,7 +10,7 @@ paginate = 15
 summaryLength = 30
 enableEmoji = true
 pygmentsCodeFences = true
-googleAnalytics: "UA-49279373-1"
+googleAnalytics = "UA-49279373-1"
 
 [author]
     name = "Ben Meier"
