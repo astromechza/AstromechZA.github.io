@@ -1,0 +1,17 @@
+baseURL = "https://astromechza.github.io/"
+languageCode = "en-us"
+title = "AstromechZA - My Mind on Code"
+theme = "kiera"
+
+copyright = "Copyright &copy; 2018 - Ben Meier"
+canonifyurls = true
+paginate = 3
+
+summaryLength = 30
+enableEmoji = true
+pygmentsCodeFences = true
+
+[author]
+    name = "Ben Meier"
+    github = "github.com/AstromechZA"
+    twitter = "@benmeier_"
