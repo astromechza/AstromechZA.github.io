@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Storage on AstromechZA</title>
+    <link>https://astromechza.github.io/tags/storage/</link>
+    <description>Recent content in Storage on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Sat, 28 Apr 2018 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/tags/storage/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Messing around with Perkeep (part 1)</title>
+      <link>https://astromechza.github.io/posts/2018-04-28-perkeep/</link>
+      <pubDate>Sat, 28 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-28-perkeep/</guid>
+      <description>Perkeep is a project authored by Brad Fitzpatrick (of Go fame). It aims to be a good solution to long term, self-hosted, personal data storage and ticks many of the boxes I’ve been looking for.</description>
+    </item>
+    
+  </channel>
+</rss>

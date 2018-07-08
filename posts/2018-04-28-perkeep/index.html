@@ -1,0 +1,218 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Messing around with Perkeep (part 1)</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-04-28T21:23:26&#43;01:00">Apr 28, 2018</time>
+        </li>
+        
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="https://astromechza.github.io/tags/storage/">#Storage</a>
+                
+            </em>
+        </li>
+        
+
+        <li>6 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p><a href="https://perkeep.org/">Perkeep</a> is a project authored by <a href="https://twitter.com/bradfitz">Brad Fitzpatrick</a> (of Go fame). It aims to be a good solution to long term, self-hosted, personal data storage and ticks many of the boxes I’ve been looking for.</p>
+
+<p><img src="https://astromechza.github.io/images/2018-04-28/perkeep.png" alt="perkeep" /></p>
+
+<p>For a long time I’ve been looking for a good data storage solution that combines storage of data files (personal documents, photos, etc) and ties in nicely with the whole idea of “quantified-self”. I’d like to be able to store things like financial records (double entry accounting entries); health records like weight, exercise, runs; gps logs; and most critically, be in full control of the data and be able to migrate it between platforms and build projects on top of this data.</p>
+
+<p>My current solution to this is a hodge-podge mix of SpiderOak Hive, Google Photos, Dropbox, Dropbox Paper and I’m just not happy with it: I feel like having full control of it would be better privacy wise and being able to contribute to Perkeep opens up many possibilities.</p>
+
+<p>I dabbled with building some of this stuff myself, old Github projects tell of Rails-based financial tracking web-apps, Java-based encrypted file stores, many ideas have been drawn-up, started, abandoned and subsequently scrapped (like 99.9% of things on Github).</p>
+
+<p>However, yesterday, I stumbled upon the Perkeep (neé Camlistore) project. It is very intriguing and the documentation and compare page are particularly attractive.</p>
+
+<blockquote>
+<p>Things Perkeep believes:</p>
+
+<ul>
+<li>Your data is entirely under your control</li>
+<li>Open Source</li>
+<li>Paranoid about privacy, everything private by default</li>
+<li>No SPOF: don’t rely on any single party (including yourself)</li>
+<li>Your data should be alive in 80 years, especially if you are</li>
+</ul>
+</blockquote>
+
+<p>So, for the remainder of this blog post, I’ll be setting up some remote storage and experimenting with a local server for a bit. I’m going into this hoping that I’ll be able to move the bulk of my data to it in the future.</p>
+
+<h2 id="cloud-storage-setup">Cloud Storage Setup</h2>
+
+<p>Perkeep is able to use a number of different backend providers for blob storage, I’m going to go with an AWS S3 object store bucket simply because I’m already using AWS EC2 and I’m familiar with it.</p>
+
+<p>So the first step will be setting up an IAM group and user for this project.</p>
+
+<ol>
+<li>Created a new IAM group <code>PerkeepGroup</code></li>
+<li>Created a new IAM user <code>PerkeepStorage</code> in the group (will enforce permissions shortly)</li>
+<li>Created a new S3 bucket <code>perkeep-personal-storage</code></li>
+<li>Added an IAM policy limiting the <code>PerkeepStorage</code> user to just the perkeep-personal-storage bucket. <code>(arn:aws:s3:::perkeep-primary-storage/*)</code></li>
+</ol>
+
+<p>Testing the auth:</p>
+
+<pre><code>$ touch blerp
+$ aws configure
+$ aws s3 cp blerp s3://perkeep-personal-storage/blerp
+upload: ./blerp to s3://perkeep-personal-storage/blerp
+$ aws s3 rm s3://perkeep-personal-storage/blerp
+</code></pre>
+
+<p><strong>Note:</strong> the reason I’m using a separate user for this S3 bucket is that the key needs to be embedded in the configuration of the Perkeep server or other clients. It would be a bad idea to be embedding a root credential there.</p>
+
+<h3 id="running-perkeep-locally">Running Perkeep locally</h3>
+
+<p>Before going all the way to a Perkeep instance, I felt it prudent to mess around with it locally on my laptop.</p>
+
+<ul>
+<li>I first thought I could use the download from the 2017–05 release, but it didn’t contain the server binary, and seemed generally a bit old for a project that is currently actively maintained and has recently been renamed (Camliproject → Perkeep). So I bit the bullet and pulled the Golang source for a local build.</li>
+<li>Then it complained that I needed Golang 1.10 although docs only stated 1.9.. 😑</li>
+<li>At least the dependencies are vendored so my South African internet doesn’t have to sweat too much 👍</li>
+<li><code>go run make.go</code> worked fine and running the binary ran without issues.</li>
+</ul>
+
+<p>I configured the server as follows:</p>
+
+<pre><code>{
+    &quot;auth&quot;: &quot;userpass:dummy:dummy&quot;,
+    &quot;listen&quot;: &quot;:3179&quot;,
+    &quot;camliNetIP&quot;: &quot;&quot;,
+    &quot;identity&quot;: &quot;XXXXXXXXXXXXXXXX&quot;,
+    &quot;identitySecretRing&quot;: &quot;/Users/benmeier/.config/perkeep/identity-secring.gpg&quot;,
+    &quot;packRelated&quot;: true,
+    &quot;levelDB&quot;: &quot;/Users/benmeier/Library/Camlistore/index.leveldb&quot;,
+    &quot;s3&quot;: &quot;someid:somekey:perkeep-personal-storage&quot;
+}
+</code></pre>
+
+<p><strong>Note:</strong> at this point I hit bug #911 because my bucket was in EU Frankfurt region which apparently mandates a new auth mechanism. So until this is fixed in Perkeep you need to host the bucket elsewhere like EU Ireland</p>
+
+<p><strong>Note 2:</strong> I also found that the example IAM config in Perkeep’s docs was a bit out of date and needed some additions for permissions on the bucket itself, not just the <code>/*</code>.</p>
+
+<h2 id="results">Results</h2>
+
+<p>I spent a few hours uploading images and files to the local server and experimenting with the UI. I had a few sticky points getting uploads to work correctly but I think most problems were due to a slow and unreliable internet connection. The following are my thoughts after messing around with it. <em>Please bear in mind that these issues are only temporary and may be fixed or improved in future:</em></p>
+
+<ul>
+<li>It takes a bit to get used to the fact that this is NOT file-oriented. You have “Sets” which are kind of like folders and can be nested, but the tree is quite unlike a normal file browser.</li>
+<li>The search is fairly non-intuitive. It’s certainly powerful, but I’d expect that when you type a simple string, it’ll pick up results from “Sets” that have the similar name. So I’m trying to think about how I’d navigate the UI when using it in the day to day.</li>
+<li>PDFs aren’t really supported as a type, if you open the permanode for one you get a “Content not found” message which is a bit counter intuitive. To download it, you have to go back to the main ui &gt; context menu &gt; download original.</li>
+<li>No support for easily renaming “files” or “sets” yet. It’s possible, but really tricky in the UI.</li>
+<li>No UI sorting, attribute columns, etc. Feels like a toolbar would be useful.</li>
+<li>Images seem to work really well, but almost everything else seems like a second-class citizen in the UI.</li>
+<li>Upload dialog was confusing, I know the JS upload progress API’s are a bit “meh” but I’d expect the upload progress to be a bit more indicative of the speed/bandwidth.</li>
+<li>I wonder how the UI holds up when you have thousands of items in it. It feels like you’d quickly become much more dependant on the search functionality rather than any kind of “file-system”-like views. I’m imagining a varied mix of high-res photos, pdf documents, text files, tweets, rss feeds, links, json facts, etc.. all with different varieties of importance and read/write balance.</li>
+</ul>
+
+<p>In general, I really like the concept of the storage engine. It is super powerful and has almost endless possibilities. However I went into the experiment wanting to find a ready-to-go system that I could begin using immediately without much worry on an EC2 instance, and I feel like I ended up with something that I want to contribute to first before I can begin using it. (And attempt to help fix some of the issues I had). Guess it’s time to learn some React! 😁</p>
+
+<p><strong>Hopefully I’ll have a part 2 up some time in the future with some more experiments and hopefully some contributions upstream.</strong></p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2018-04-21-python-skeletons/"><i class="fa fa-chevron-circle-left"></i> Python Skeletons</a>
+        </li>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2018-04-29-faultz/">Thoughts on a fault injection API <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

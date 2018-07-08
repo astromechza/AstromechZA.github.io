@@ -1,0 +1,152 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Programmatic PDF generation</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2013-06-07T21:23:26&#43;01:00">Jun 7, 2013</time>
+        </li>
+        
+        
+
+        
+
+        <li>3 min read</li>
+    </ul>
+</aside>
+    
+
+    <p>I came across an interesting (and really useful) Python module recently. <a href="https://code.google.com/p/pyfpdf/">PyFPDF</a> is a Python port of the popular php .pdf generation library FPDF. Remarkably it is portable and cross platform due to the nature of the PDF format and uses a grand total of 126kB.</p>
+
+<p>Here is the code for a simple document:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> fpdf <span style="color:#f92672">import</span> FPDF
+
+pdf <span style="color:#f92672">=</span> FPDF()
+pdf<span style="color:#f92672">.</span>add_page()
+pdf<span style="color:#f92672">.</span>set_y(<span style="color:#ae81ff">30</span>)
+pdf<span style="color:#f92672">.</span>set_margins(<span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">20</span>)
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;times&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#ae81ff">30</span>)
+pdf<span style="color:#f92672">.</span>set_text_color(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+pdf<span style="color:#f92672">.</span>cell(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">&#34;A Sample Document&#34;</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;C&#39;</span>)
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;times&#39;</span>, <span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#ae81ff">20</span>)
+pdf<span style="color:#f92672">.</span>set_text_color(<span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">50</span>)
+pdf<span style="color:#f92672">.</span>cell(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">&#34;A short demo of the pyfpdf library&#34;</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;C&#39;</span>)
+
+pdf<span style="color:#f92672">.</span>ln()
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;arial&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#ae81ff">13</span>)
+pdf<span style="color:#f92672">.</span>set_text_color(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+pdf<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#34;Example of a link: &#34;</span>)
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;arial&#39;</span>, <span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#ae81ff">13</span>)
+pdf<span style="color:#f92672">.</span>set_text_color(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">200</span>)
+pdf<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#34;google.com&#34;</span>, <span style="color:#e6db74">&#34;http://google.com&#34;</span>)
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;arial&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#ae81ff">13</span>)
+pdf<span style="color:#f92672">.</span>set_text_color(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+pdf<span style="color:#f92672">.</span>write(<span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#34; and some more text.&#34;</span>)
+
+pdf<span style="color:#f92672">.</span>set_font(<span style="color:#e6db74">&#39;helvetica&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#ae81ff">10</span>)
+text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur iaculis imperdiet magna, ut placerat velit lobortis ac. Pellentesque ut luctus orci, sed sodales eros. Nulla vitae sapien laoreet, aliquam augue a, elementum leo. Maecenas ultricies velit sit amet elit aliquam, sit amet interdum tellus hendrerit. Pellentesque massa orci, malesuada fringilla neque sit amet, commodo fringilla tortor. In orci tortor, porta sit amet tincidunt vitae, convallis in risus. Duis lobortis dolor eu metus cursus, eget viverra magna fermentum. Duis a vehicula metus. Sed laoreet accumsan neque, in sollicitudin lacus faucibus quis. Phasellus cursus ligula vitae nisi adipiscing, id iaculis est ultrices. Donec pretium urna nec nulla porttitor scelerisque. Pellentesque ut sem sagittis, vulputate magna tempor, vehicula dolor. Cras eu euismod libero. Donec id sapien est. Nulla sagittis accumsan nibh eget dignissim. Fusce ultrices justo ut eleifend pharetra. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tristique in orci a luctus. Mauris diam ante, dignissim nec sollicitudin at, fringilla in enim. Praesent et dui at velit dictum adipiscing. Sed quis commodo ipsum, in egestas nunc. Etiam magna purus, venenatis vel dui et, imperdiet rhoncus turpis. Proin mauris massa, pharetra vel orci sit amet, vulputate gravida ipsum. Morbi in dictum ligula. Nullam elementum tempus massa quis rutrum. Fusce ut libero justo. Donec eu urna eget tortor rhoncus imperdiet vel id erat. Sed non laoreet dui, laoreet facilisis est. Sed quis eros ligula. Cras ac tortor vitae orci euismod lacinia ut vel lacus. Aenean commodo tortor ut felis blandit, at accumsan turpis auctor. Morbi eleifend volutpat dolor sed condimentum. Nam nec nunc sit amet nisi vestibulum euismod. Nam feugiat lorem id massa auctor bibendum. Vivamus id metus cursus, bibendum nulla non, vulputate elit. Proin ligula nisl, pellentesque sit amet lectus ac, tempor porttitor tortor. Nullam tincidunt adipiscing tellus, ac convallis diam auctor non. Quisque lacinia pharetra sapien, in pellentesque eros cursus at. Quisque viverra ut felis non malesuada.&#34;</span>
+pdf<span style="color:#f92672">.</span>ln(<span style="color:#ae81ff">10</span>)
+pdf<span style="color:#f92672">.</span>multi_cell(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">5</span>, text)</code></pre></div>
+<p>This generates a document that looks like this:
+<img src="https://astromechza.github.io/images/screenshot.13.jpg" alt="PDF Sample" /></p>
+
+<p>Relatively simple! It produces a slim and efficient pdf document almost instantaneously.</p>
+
+<p>So far I’m using this to replace Google Docs for certain small documents that need to be regenerated regularly. It also avoids the sillyness of OpenOffice vs Microsoft Word formatting since I use both Ubuntu and Windows. PyFPDF could be really useful in future when decent output is required.</p>
+
+<p>Unfortunately, PyFPDF requires many lines to produce a more complicated document. In order to make it more useful, I think it requires a structured DOM tree of sorts to make it easier to create better structure in the page. If I use this library more in the future I might start a project to do that.</p>
+
+<p>There are also existing libraries for converting HTML/CSS into PDF. These work well, but I find that HTML/CSS are too strictly bound to a fluid dimension web layout, whilst documents often need to be fixed to A4. Of course, pick the solution that fits the problem and works.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2013-11-13-malicious-fb-plugin/">Malicious Facebook plugin analysis <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

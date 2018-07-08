@@ -1,0 +1,257 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>The road to hyperthreading</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2016-09-14T21:23:26&#43;01:00">Sep 14, 2016</time>
+        </li>
+        
+        
+
+        
+
+        <li>5 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>A brief overview of how CPU architecture has brought us to hyperthreading via
+instruction pipelining and superscalar architectures.</p>
+
+<hr />
+
+<h3 id="first-some-history-bits">First some history bits</h3>
+
+<h4 id="1-execution-units">1. Execution units</h4>
+
+<p>An execution unit is a subsection of a CPU dedicated to one kind of instruction
+processing.</p>
+
+<ul>
+<li>ALU (arithmetic logic unit, used for integer operations)</li>
+<li>FPU (floating point unit, used for floating point calculations)</li>
+<li>AGU (address generation unit, compute memory addresses)</li>
+<li>several other more specialised components</li>
+</ul>
+
+<p>The CPU dispatcher is used to decode an incoming instruction and send it to the
+specific execution unit which is best suited to doing the work.</p>
+
+<h4 id="2-instruction-pipelining-https-en-wikipedia-org-wiki-instruction-pipelining">2. <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">Instruction pipelining</a></h4>
+
+<p>With multiple execution units available, most of them stand idle while an instruction
+is being performed. Why can&rsquo;t we use the idle components to perform operations
+if we have upcoming instructions which we can dispatch to them that don&rsquo;t require
+the output of other operations? This is <em>instruction pipelining</em>. The CPU can decode
+and dispatch additional instructions while already dispatched instructions are still busy.</p>
+
+<p>For example:</p>
+
+<ul>
+<li>first stage extracts an instruction from the cache</li>
+<li>second stage decodes the instruction</li>
+<li>third stage translates memory addresses</li>
+<li>fourth stage executes the instruction</li>
+<li>fifth stage writes the results back to the registers and memory</li>
+</ul>
+
+<p>We can have a piece of work in each of the stages above at any time.</p>
+
+<p><img src="http://www.gamedev.net/uploads/monthly_05_2013/ccs-78358-0-60361400-1367786551.png" alt="pipelined instructions" /></p>
+
+<p>This was first used around 1940 but became very useful in the late 1970&rsquo;s in
+supercomputers dedicated to vector and array processing. You can see how needing
+to perform the same operation on a number of items can leverage pipelining.</p>
+
+<h4 id="3-superscalar-https-en-wikipedia-org-wiki-superscalar-processor-cpus">3. <a href="https://en.wikipedia.org/wiki/Superscalar_processor">Superscalar</a> CPUs</h4>
+
+<p>The next step up from pipelining is superscalar architectures. Instead of having
+single copies of each execution unit, a superscalar CPU has multiple ALUs, FPUs,
+etc. In a simple scalar CPU architecture, the CPU can execute a single instruction
+at a time by passing it to the relevant unit.
+In a superscalar architecture, the cpu dispatcher reads the next set of
+instructions and can dispatch them concurrently to different units as long as
+they don&rsquo;t depend on each other. In the worst case, the instructions cannot are
+tightly coupled and cannot be run concurrently, but in the best case it can
+sustain an execution rate of more than one instruction per cycle. This works
+hand-in-hand with pipelining.</p>
+
+<p>Superscalar CPUs were first commercially released around 1988-1990. If you look
+at the high level diagrams of the Intel i7 CPUs you&rsquo;ll be able to see the
+multiple copies of the execution units. On <a href="https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)">this</a>
+page, it states &ldquo;3 integer ALU, 2 vector ALU and 2 AGU per core&rdquo;.</p>
+
+<h4 id="4-hyperthreading-https-en-wikipedia-org-wiki-hyper-threading">4. <a href="https://en.wikipedia.org/wiki/Hyper-threading">Hyperthreading</a></h4>
+
+<p>Hyperthreading first appeared in 2002 on Intel Xeon and Pentium 4 CPUs. It takes
+advantage of the superscalar design in order to provide higher performance for
+multi-threaded workloads. By duplicating the part of the CPU that stores the
+current execution state for a thread, the dispatcher can execute instructions
+for either of the threads and it can more effectively take advantage of all of
+the execution units.</p>
+
+<p><img src="http://m.eet.com/media/1073565/optimizing_embedded_designs_fig1.jpg" alt="Image of multiple architectural states" /></p>
+
+<p>Normally, the short-term cpu scheduler can only allocate a single thread onto a
+cpu at a time. This context switch happens once every time slices, or when specific
+interrupts occur (device IO, forks, etc.). If the cpu supports hyperthreading, it can
+hold 2 allocations at a time so the scheduler can use a little intelligence to
+keep 2 threads allocated to the cpu whenever possible.</p>
+
+<hr />
+
+<p>It&rsquo;s useful to see that there are always tradeoffs to these designs:</p>
+
+<ul>
+<li><p>Superscalar work depends on how your instructions take advantage of the
+different execution units. If you are only doing floating point operations, it
+will be relying heavily on the FPU&rsquo;s without being able to concurrently work on
+the ALU.</p></li>
+
+<li><p>Hyperthreaded workloads depend on how CPU-bound the threads are that are
+being allocated. If a thread is heavily using the superscalar functionality,
+another thread allocated to the CPU will not be able to share the execution
+resources effectively.</p></li>
+
+<li><p>In some predictable workloads it may be useful to disable hyperthreading
+entirely since the overthread of the additional context switching may actually
+degrade performance overall.</p></li>
+</ul>
+
+<p>CPU&rsquo;s over the years have become very advanced in order to reorder-instructions
+and predict and mitigate potential performance stalls.</p>
+
+<p>I should really try and record a video explaining this on paper.. it&rsquo;s a lot
+easier that way..</p>
+
+<h3 id="what-this-comes-down-to">What this comes down to:</h3>
+
+<p><em>Hyperthreading is a marketing misnomer</em> - kinda. It&rsquo;s all too common now for
+CPUs to be advertised as quad core when they only have 2 physical hyperthreaded
+computation cores. It is also <strong>extremely</strong> rare to have a workload that gets
+the same performance on 2 physical cores vs 1 hyperthreaded core. If you want
+brute force concurrent processing power you want multiple cores, while if you
+have many light weight threaded workloads, hyperthreading will allow you to more
+efficiently use the resources you have.</p>
+
+<p>So at the moment an Intel i5 CPU is usually cheaper than an i7 since it either
+has 4 physical cores without hyperthreading or 2 physical cores <em>with</em>
+hyperthreading, while i7 CPUs commonly have 4 or even 6 cores along with hyperthreading.</p>
+
+<p>Sadly, my Macbook Pro has the i7-4558U which despite a great clock speed and
+cache size, only has 2 cores with hyperthreading.</p>
+
+<h3 id="impact-on-cloud-vm-providers">Impact on cloud VM providers</h3>
+
+<p>Cloud providers offering VM (virtual machine)&rsquo;s, commonly use Intel Xeon processors.
+A recently released Xeon processor offers 18 cores with hyperthreading for a total of 36
+&ldquo;threads&rdquo; or virtual cores. In the operating system each of these 36 threads
+can be allocated work so each one appears as a distinct processor when you run
+<code>cat /proc/cpuinfo</code> or similar. When launching VM&rsquo;s it&rsquo;s important to realise
+that unless you are strictly pairing the hyperthreaded cpus together, you may
+have 2 customers that share a single physical cpu between their VMs which means
+that a workload in one VM may impact the other VM.</p>
+
+<h4 id="other-useful-links-that-may-explain-things-better">Other useful links that may explain things better</h4>
+
+<ul>
+<li><a href="http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm">http://www.tutorialspoint.com/operating_system/os_process_scheduling.htm</a></li>
+<li><a href="https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput">https://www.percona.com/blog/2015/01/15/hyper-threading-double-cpu-throughput</a></li>
+<li><a href="https://bitsum.com/pl_when_hyperthreading_hurts.php">https://bitsum.com/pl_when_hyperthreading_hurts.php</a></li>
+<li><a href="http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115">http://www.gamedev.net/page/resources/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115</a></li>
+</ul>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2016-09-10-ntp-agent-part-1/"><i class="fa fa-chevron-circle-left"></i> Building an NTP agent</a>
+        </li>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2016-10-02-better-cli/">Building better command-line tools and applications <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

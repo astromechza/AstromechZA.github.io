@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on AstromechZA</title>
+    <link>https://astromechza.github.io/tags/python/</link>
+    <description>Recent content in Python on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Sat, 21 Apr 2018 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python Skeletons</title>
+      <link>https://astromechza.github.io/posts/2018-04-21-python-skeletons/</link>
+      <pubDate>Sat, 21 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-21-python-skeletons/</guid>
+      <description>An example of easy project templating without the cp -r, sed, grep.
+I write a lot of Python. Sometimes I even get paid for it. Most of the time, it’s quick libraries and utilities focused on solving small and specific problems for myself and my general team.</description>
+    </item>
+    
+  </channel>
+</rss>

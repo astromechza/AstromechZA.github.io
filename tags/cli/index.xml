@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cli on AstromechZA</title>
+    <link>https://astromechza.github.io/tags/cli/</link>
+    <description>Recent content in Cli on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Sun, 02 Oct 2016 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/tags/cli/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Building better command-line tools and applications</title>
+      <link>https://astromechza.github.io/posts/2016-10-02-better-cli/</link>
+      <pubDate>Sun, 02 Oct 2016 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2016-10-02-better-cli/</guid>
+      <description>A collection of tips and tricks for writing CLI-driven tools and applications. None of these are official guidelines of any kind but rather just the things I like to keep in mind when writing executable binaries, scripts, and even larger applications.</description>
+    </item>
+    
+  </channel>
+</rss>

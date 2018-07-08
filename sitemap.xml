@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2018-06-29-ipvs/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2018-04-29-faultz/</loc>
+    <lastmod>2018-04-29T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2018-04-28-perkeep/</loc>
+    <lastmod>2018-04-28T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2018-04-21-python-skeletons/</loc>
+    <lastmod>2018-04-21T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2016-10-02-better-cli/</loc>
+    <lastmod>2016-10-02T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2016-09-14-the-road-to-hyperthreading/</loc>
+    <lastmod>2016-09-14T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2016-09-10-ntp-agent-part-1/</loc>
+    <lastmod>2016-09-10T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2015-03-09-building-whereismypower/</loc>
+    <lastmod>2015-03-09T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2014-06-04-month-of-may/</loc>
+    <lastmod>2014-06-04T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2014-04-13-honours-project-topic/</loc>
+    <lastmod>2014-04-13T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2014-03-23-building-a-jekyll-blog/</loc>
+    <lastmod>2014-03-23T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2014-03-22-the-birth-of-this-blog/</loc>
+    <lastmod>2014-03-22T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2013-11-13-malicious-fb-plugin/</loc>
+    <lastmod>2013-11-13T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/posts/2013-06-07-programmatic-document/</loc>
+    <lastmod>2013-06-07T21:23:26+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/chaos-engineering/</loc>
+    <lastmod>2018-04-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/cli/</loc>
+    <lastmod>2016-10-02T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/ipvs/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/kubernetes/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/load-balancing/</loc>
+    <lastmod>2018-06-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/python/</loc>
+    <lastmod>2018-04-21T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/storage/</loc>
+    <lastmod>2018-04-28T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://astromechza.github.io/tags/</loc>
+    <lastmod>2018-04-29T21:23:26+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

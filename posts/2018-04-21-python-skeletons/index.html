@@ -1,0 +1,209 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Python Skeletons</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-04-21T21:23:26&#43;01:00">Apr 21, 2018</time>
+        </li>
+        
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="https://astromechza.github.io/tags/python/">#Python</a>
+                
+            </em>
+        </li>
+        
+
+        <li>4 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>An example of easy project templating without the <code>cp -r</code>, <code>sed</code>, <code>grep</code>.</p>
+
+<p>I write a lot of Python. <em>Sometimes I even get paid for it.</em> Most of the time, it’s quick libraries and utilities focused on solving small and specific problems for myself and my general team. As I’ve been doing this, I find myself often wasting time or yack-shaving while I find the same old Hackernews solutions for various setuptools issues or testing flavours. To combat this, I reach for templated project skeletons that I can customise and generate in a single command. For Python, my requirements are generally:</p>
+
+<ul>
+<li>&ldquo;Modern&rdquo; setuptools <strong>packaging</strong> and integration</li>
+<li>Ability to generate <strong>cli entrypoints</strong> (for command line tools; this should be able to be skipped when generating a library)</li>
+<li>Solid examples of <strong>pytest</strong> integration (fixtures, parametrize(), etc..). I don’t want to have to look these up every time. Code coverage!</li>
+<li>The generated project should be able to be built, tested, and should have good Python style from the get go.</li>
+<li>Python <sup>2</sup>&frasl;<sub>3</sub> <strong>compatible</strong> to various extents. This is only because I’ve had to write a lot of Python 2.<sup>6</sup>&frasl;<sub>2</sub>.7 code 😲. Hopefully one day I can move exclusively to &gt;3.5.</li>
+<li>A <strong>README.md</strong> with valid and reproducible instructions.</li>
+<li>Version-control based <strong>versioning</strong> via <code>setuptools_scm</code>. This makes it easy to cut versions using tags, rather than synchronising a tag and a version string in the repo.</li>
+<li>Travis-CI file for getting going with Travis (optional depending on whether the project is on Github). This should be able to be adapted for Gitlab-CI, or whatever CI is being used.</li>
+</ul>
+
+<p><strong>TLDR</strong>: <em>I want to know all the project setup stuff is taken care of and that I can build a solid project without duplicated effort.</em></p>
+
+<h2 id="the-templater">The Templater</h2>
+
+<p>I use a project of my own creation called Spiro for generating projects from a template directory. You could use any other template/skeleton system but Spiro fullfills a bunch of use cases for me:</p>
+
+<ul>
+<li>Good logic support in templates (if-else..) using Golang’s text/template package</li>
+<li>Templating of file/directory names</li>
+<li>Generate a new project in a single command</li>
+<li>Processors for various things like lower()/upper()/regex..</li>
+</ul>
+
+<p>See the Spiro project for more examples: <a href="https://github.com/AstromechZA/spiro">https://github.com/AstromechZA/spiro</a>. I maintain it and add features generally when required to support new project templates.</p>
+
+<h2 id="the-template-s">The Template/s</h2>
+
+<p>The template I use is available here: <a href="https://github.com/AstromechZA/python-package-spiro">https://github.com/AstromechZA/python-package-spiro</a>. At the time of writing it needs to be cloned or extracted onto your machine.</p>
+
+<p>It has a <code>spec.yaml</code> that looks something like this:</p>
+
+<pre><code>package_name: hello-world
+module_name: hello_world
+
+author: Change Me
+author_email: changeme@example.com
+
+short_description: Hello world example project
+
+use_scm_versioning: true
+
+entrypoints:
+    - hello-world
+</code></pre>
+
+<p>And with Spiro I can use it as follows:</p>
+
+<pre><code>$ ./spiro -edit python-package-spiro/\{\{.package_name\}\} python-package-spiro/spec.yaml some-output-dir
+</code></pre>
+
+<p>💡The <code>\{\{..</code> betrays the use of Golang templating, hopefully I can find a better way of autodetecting the template root in the future.</p>
+
+<p>Which can easily be aliased to just:</p>
+
+<pre><code>$ alias new-python-project=&quot;./spiro -edit python-package-spiro/\{\{.package_name\}\} python-package-spiro/spec.yaml&quot;
+$ new-python-project /home/projects/
+</code></pre>
+
+<p>This command, with the <code>-edit</code> flag, opens up your <code>$EDITOR</code> to edit the spec inline before rendering the template.</p>
+
+<h2 id="the-results">The Results</h2>
+
+<p>Running this template with the default “hello-world” spec contents gives the following:</p>
+
+<ul>
+<li><code>python setup.py develop</code> sets up the package, installs setup and install dependencies.</li>
+<li><code>python setup.py test</code> runs <code>pytest</code> unittests with examples of fixtures and parametrisation.</li>
+<li><code>pip install .[test]</code> demonstrates the use of setuptools extras and installs the test dependencies in the virtualenv.</li>
+<li>A flake8 unittest runs style checking on the code base as part of the unittest. <em>A good way to ensure you’re sticking to the pep/community rules.</em></li>
+<li>A single cli command hello-world is made available as the entry point of the program.</li>
+<li><code>setuptools_scm</code> means that versioning comes from tags in Git such as v0.1 or 1.2.3. This makes releasing new versions much easier. By default the version is seen as 0.0.0. (This does rely on doing a <code>git init</code> first).</li>
+<li>A Travis-CI file means that the project is ready to go with Travis running a suite of tests from the first time code is committed to the repo. Some small additions can give you automated Github or Pypi uploads as well.</li>
+</ul>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>With this in place, you can jump straight into prototyping and releasing a Python-based tool without too much worry about its setup and packaging.</p>
+
+<p>The approach can also be adopted for any other language since the patterns are language agnostic. I’ve written more complex templates for large Twisted-based python micro-services for work, but the most useful results always come from more frequently generated templates.</p>
+
+<p>##Future work and TODOs</p>
+
+<p>The template will always be tweaked over time as I work out more suitable ways of doing things or when new techniques, libraries, Python versions, etc come about. I also want to add some features to Spiro to make distribution of templates easier and to allow better sharing without having to manually git clone.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2016-10-02-better-cli/"><i class="fa fa-chevron-circle-left"></i> Building better command-line tools and applications</a>
+        </li>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2018-04-28-perkeep/">Messing around with Perkeep (part 1) <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

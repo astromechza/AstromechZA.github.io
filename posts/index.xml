@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>All Posts on AstromechZA</title>
+    <link>https://astromechza.github.io/posts/</link>
+    <description>Recent content in All Posts on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Fri, 29 Jun 2018 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Minimal IPVS Load Balancer demo</title>
+      <link>https://astromechza.github.io/posts/2018-06-29-ipvs/</link>
+      <pubDate>Fri, 29 Jun 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-06-29-ipvs/</guid>
+      <description>Over the past couple of days I’ve been investigating various load balancing techniques (Layer 4 and Layer 7) for use with Kubernetes’ (K8s) external load balancers.
+For context: in a well deployed cluster, you will probably use a K8s ingress controller implementation to route traffic to particular apps and services using complex L7 routing rules (like Host headers, cookies-stickiness, etc.</description>
+    </item>
+    
+    <item>
+      <title>Thoughts on a fault injection API</title>
+      <link>https://astromechza.github.io/posts/2018-04-29-faultz/</link>
+      <pubDate>Sun, 29 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-29-faultz/</guid>
+      <description>Managed fault injection APIs for providing powerful chaos engineering functionality. How about a POST /faultz endpoint for in-process chaos engineering?
+I recently re-watched Kelsey Hightower’s &amp;ldquo;Monitoring from the inside&amp;rdquo; (2016) talk regarding leveraging healthcheck endpoints for readiness monitoring of services in a Kubernetes context and it set some seeds going in my mind.</description>
+    </item>
+    
+    <item>
+      <title>Messing around with Perkeep (part 1)</title>
+      <link>https://astromechza.github.io/posts/2018-04-28-perkeep/</link>
+      <pubDate>Sat, 28 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-28-perkeep/</guid>
+      <description>Perkeep is a project authored by Brad Fitzpatrick (of Go fame). It aims to be a good solution to long term, self-hosted, personal data storage and ticks many of the boxes I’ve been looking for.</description>
+    </item>
+    
+    <item>
+      <title>Python Skeletons</title>
+      <link>https://astromechza.github.io/posts/2018-04-21-python-skeletons/</link>
+      <pubDate>Sat, 21 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-21-python-skeletons/</guid>
+      <description>An example of easy project templating without the cp -r, sed, grep.
+I write a lot of Python. Sometimes I even get paid for it. Most of the time, it’s quick libraries and utilities focused on solving small and specific problems for myself and my general team.</description>
+    </item>
+    
+    <item>
+      <title>Building better command-line tools and applications</title>
+      <link>https://astromechza.github.io/posts/2016-10-02-better-cli/</link>
+      <pubDate>Sun, 02 Oct 2016 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2016-10-02-better-cli/</guid>
+      <description>A collection of tips and tricks for writing CLI-driven tools and applications. None of these are official guidelines of any kind but rather just the things I like to keep in mind when writing executable binaries, scripts, and even larger applications.</description>
+    </item>
+    
+    <item>
+      <title>The road to hyperthreading</title>
+      <link>https://astromechza.github.io/posts/2016-09-14-the-road-to-hyperthreading/</link>
+      <pubDate>Wed, 14 Sep 2016 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2016-09-14-the-road-to-hyperthreading/</guid>
+      <description>A brief overview of how CPU architecture has brought us to hyperthreading via instruction pipelining and superscalar architectures.
+First some history bits 1. Execution units An execution unit is a subsection of a CPU dedicated to one kind of instruction processing.</description>
+    </item>
+    
+    <item>
+      <title>Building an NTP agent</title>
+      <link>https://astromechza.github.io/posts/2016-09-10-ntp-agent-part-1/</link>
+      <pubDate>Sat, 10 Sep 2016 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2016-09-10-ntp-agent-part-1/</guid>
+      <description>My home/media server has a small Grafana instance with a Spoon instance collecting and reporting metrics to it (network stats, disk usage, etc..). It&amp;rsquo;s been running for quite a while now and I&amp;rsquo;ve used the stats for a bunch of things so far.</description>
+    </item>
+    
+    <item>
+      <title>Building whereismypower.co.za</title>
+      <link>https://astromechza.github.io/posts/2015-03-09-building-whereismypower/</link>
+      <pubDate>Mon, 09 Mar 2015 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2015-03-09-building-whereismypower/</guid>
+      <description>This post covers the creation of whereismypower.co.za, a load shedding schedule website I developed as a side project.
+ 25,057 page views over 3 months R 99 total cost (excluding free credits)  Due to South Africa&amp;rsquo;s crippled and straining power supply, the national power utility (Eskom) has implemented a schedule of load shedding whereby, in times of peak demand, power is shut off in certain areas according to a rotating schedule.</description>
+    </item>
+    
+    <item>
+      <title>The month of May</title>
+      <link>https://astromechza.github.io/posts/2014-06-04-month-of-may/</link>
+      <pubDate>Wed, 04 Jun 2014 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2014-06-04-month-of-may/</guid>
+      <description>May has been a very busy month. All our modules have had projects due so I haven&amp;rsquo;t had much time to work on personal things. Thankfully now the modules for this term are complete and other than one more exam next week, we are now on holiday.</description>
+    </item>
+    
+    <item>
+      <title>Honours project topic!</title>
+      <link>https://astromechza.github.io/posts/2014-04-13-honours-project-topic/</link>
+      <pubDate>Sun, 13 Apr 2014 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2014-04-13-honours-project-topic/</guid>
+      <description>This week my group received our project topic for our Honours thesis. The Computer Science faculty at my university (UCT) requires a thesis as part of the 4th year. This is done in groups so that the group collaborates on the code, but each group member writes their own thesis.</description>
+    </item>
+    
+    <item>
+      <title>Basic Jekyll Blog Tutorial</title>
+      <link>https://astromechza.github.io/posts/2014-03-23-building-a-jekyll-blog/</link>
+      <pubDate>Sun, 23 Mar 2014 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2014-03-23-building-a-jekyll-blog/</guid>
+      <description>This will be a purely functional tutorial, just a barebones blog.
+Prerequisites:
+ Jekyll Gem (gem install jekyll) either via Gemfile or system.  1) Basic setup Create Jekyll project</description>
+    </item>
+    
+    <item>
+      <title>The birth of this blog</title>
+      <link>https://astromechza.github.io/posts/2014-03-22-the-birth-of-this-blog/</link>
+      <pubDate>Sat, 22 Mar 2014 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2014-03-22-the-birth-of-this-blog/</guid>
+      <description>Today (or rather late last night) I came across Jekyll an interesting static site generation framework. Based off a Ruby Gem, it uses some simple rules to transform marked-up text into a good static website with templating and layouts.</description>
+    </item>
+    
+    <item>
+      <title>Malicious Facebook plugin analysis</title>
+      <link>https://astromechza.github.io/posts/2013-11-13-malicious-fb-plugin/</link>
+      <pubDate>Wed, 13 Nov 2013 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2013-11-13-malicious-fb-plugin/</guid>
+      <description>An interesting payload was being passed around Facebook last night. It took the form of an enticing plugin that claimed to change the colour of one’s Facebook. I first came across it when I was apparently ‘tagged’ in a photo.</description>
+    </item>
+    
+    <item>
+      <title>Programmatic PDF generation</title>
+      <link>https://astromechza.github.io/posts/2013-06-07-programmatic-document/</link>
+      <pubDate>Fri, 07 Jun 2013 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2013-06-07-programmatic-document/</guid>
+      <description>I came across an interesting (and really useful) Python module recently. PyFPDF is a Python port of the popular php .pdf generation library FPDF. Remarkably it is portable and cross platform due to the nature of the PDF format and uses a grand total of 126kB.</description>
+    </item>
+    
+  </channel>
+</rss>

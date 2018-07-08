@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chaos Engineering on AstromechZA</title>
+    <link>https://astromechza.github.io/tags/chaos-engineering/</link>
+    <description>Recent content in Chaos Engineering on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Sun, 29 Apr 2018 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/tags/chaos-engineering/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Thoughts on a fault injection API</title>
+      <link>https://astromechza.github.io/posts/2018-04-29-faultz/</link>
+      <pubDate>Sun, 29 Apr 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-04-29-faultz/</guid>
+      <description>Managed fault injection APIs for providing powerful chaos engineering functionality. How about a POST /faultz endpoint for in-process chaos engineering?
+I recently re-watched Kelsey Hightower’s &amp;ldquo;Monitoring from the inside&amp;rdquo; (2016) talk regarding leveraging healthcheck endpoints for readiness monitoring of services in a Kubernetes context and it set some seeds going in my mind.</description>
+    </item>
+    
+  </channel>
+</rss>

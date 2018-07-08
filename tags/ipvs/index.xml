@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ipvs on AstromechZA</title>
+    <link>https://astromechza.github.io/tags/ipvs/</link>
+    <description>Recent content in Ipvs on AstromechZA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright &amp;copy; 2018 - Ben Meier</copyright>
+    <lastBuildDate>Fri, 29 Jun 2018 21:23:26 +0100</lastBuildDate>
+    
+	<atom:link href="https://astromechza.github.io/tags/ipvs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Minimal IPVS Load Balancer demo</title>
+      <link>https://astromechza.github.io/posts/2018-06-29-ipvs/</link>
+      <pubDate>Fri, 29 Jun 2018 21:23:26 +0100</pubDate>
+      
+      <guid>https://astromechza.github.io/posts/2018-06-29-ipvs/</guid>
+      <description>Over the past couple of days I’ve been investigating various load balancing techniques (Layer 4 and Layer 7) for use with Kubernetes’ (K8s) external load balancers.
+For context: in a well deployed cluster, you will probably use a K8s ingress controller implementation to route traffic to particular apps and services using complex L7 routing rules (like Host headers, cookies-stickiness, etc.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,329 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>A Minimal IPVS Load Balancer demo</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-06-29T21:23:26&#43;01:00">Jun 29, 2018</time>
+        </li>
+        
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="https://astromechza.github.io/tags/kubernetes/">#Kubernetes</a>
+                
+                    , 
+                    <a href="https://astromechza.github.io/tags/load-balancing/">#Load Balancing</a>
+                
+                    , 
+                    <a href="https://astromechza.github.io/tags/ipvs/">#ipvs</a>
+                
+            </em>
+        </li>
+        
+
+        <li>7 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>Over the past couple of days I’ve been investigating various load balancing techniques (Layer 4 and Layer 7) for use with Kubernetes’ (K8s) external load balancers.</p>
+
+<p>For context: in a well deployed cluster, you will probably use a K8s ingress controller implementation to route traffic to particular apps and services using complex L7 routing rules (like Host headers, cookies-stickiness, etc..). However this still means that the TCP connections may be hitting a single node in the cluster if you have DNS set up that way. It is often necessary then to add a external L4 IP load balancer outside of the K8s cluster that balances traffic between all of the node’s running your ingress controller.</p>
+
+<p><img src="https://astromechza.github.io/images/2018-06-29/lb-ingress.png#float-right" alt="loadbalanced-ingress" /></p>
+
+<p>There are many services that can do Layer 4 load balancing: Nginx/Nginx Plus, HAProxy, and the one we’ll look at today, IPVS.</p>
+
+<p>IPVS (IP Virtual Service) is a Linux kernel load balancer that has been part of most modern Linux based operating systems using kernel 2.4.x and above. It is based on the Linux netfilter components which are another really interesting aspect of modern Linux networking but a bit too much to get into right now.</p>
+
+<p>You can read more about IPVS in these places:</p>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/IP_Virtual_Server">IP Virtual Server</a> (wikipedia)</li>
+<li><a href="http://kb.linuxvirtualserver.org/wiki/Ipvsadm">ipvsadm</a> (man page for cli tool)</li>
+</ul>
+
+<p>The rest of this post will be a quick demo of using IPVS to balance between two docker containers on a machine.</p>
+
+<h2 id="demo-time">Demo time</h2>
+
+<p>Ingredients required:</p>
+
+<ul>
+<li>A VM with a publicly accessible IP address that you can SSH into</li>
+<li>Docker installed and configured</li>
+<li>A modern Linux kernel</li>
+</ul>
+
+<h3 id="1-install-ipvsadm">1. Install ipvsadm</h3>
+
+<p>I’m using an Oracle Linux 7 UEK4 host with a 4.1.12 kernel.</p>
+
+<pre><code>$ sudo yum install -y ipvsadm
+</code></pre>
+
+<p>Note: <code>ipvsadm</code> is just the cli tool for interacting with the IP virtual server table in the kernel. <code>ip_vs</code> is the kernel module that does the actual connection manipulating.</p>
+
+<h3 id="2-check-that-the-command-can-be-used">2. Check that the command can be used</h3>
+
+<p>Your machine may not have the kernel module loaded or available.</p>
+
+<pre><code>$ sudo ipvsadm -l
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port   Forward Weight ActiveConn InActConn
+</code></pre>
+
+<h3 id="3-launch-2-nginx-docker-containers-with-some-dummy-content">3. Launch 2 nginx Docker containers with some dummy content</h3>
+
+<p>Some dummy content will help differentiate between responses once we can make requests against the servers.</p>
+
+<pre><code>$ mkdir /srv/A /srv/B
+
+$ echo &quot;This is A&quot; &gt; /srv/A/index.html
+$ docker run --rm -d -v &quot;/srv/A:/usr/share/nginx/html&quot; --name nginx-A nginx
+$ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nginx-A
+172.17.0.3
+
+$ echo &quot;This is B&quot; &gt; /srv/B/index.html
+$ docker run --rm -d -v &quot;/srv/B:/usr/share/nginx/html&quot; --name nginx-B nginx
+$ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nginx-B
+172.17.0.4
+</code></pre>
+
+<p>Check that curl works against both servers:</p>
+
+<pre><code>$ curl 172.17.0.3
+This is A
+$ curl 172.17.0.4
+This is B
+</code></pre>
+
+<h3 id="4-set-up-a-new-ipvs-service">4. Set up a new IPVS service</h3>
+
+<p>Now we can set up a new IPVS service bound to our servers public ip address (eg: 1.2.3.4). We’re going to make it a tcp load balancer using a round robin algorithm ( -t and -s rr ):</p>
+
+<pre><code>$ sudo ipvsadm -A -t 1.2.3.4:80 -s rr
+$ sudo ipvsadm -l -n
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port    Forward Weight ActiveConn InActConn
+TCP  1.2.3.4:80        rr
+</code></pre>
+
+<h3 id="5-add-the-docker-container-ips-as-the-real-hosts">5. Add the Docker container IPs as the “real” hosts</h3>
+
+<pre><code>$ sudo ipvsadm -a -t 1.2.3.4:80 -r 172.17.0.3 -m
+$ sudo ipvsadm -a -t 1.2.3.4:80 -r 172.17.0.4 -m
+</code></pre>
+
+<h3 id="6-issue-some-requests">6. Issue some requests!</h3>
+
+<p>You can do this from the VM itself, or for a more useful example, do it from another machine that can connect to the VM.</p>
+
+<pre><code>$ curl 1.2.3.4
+This is A
+$ curl 1.2.3.4
+This is B
+</code></pre>
+
+<p>By default this will use round robin load balancing which will just loop through the list of destinations:</p>
+
+<pre><code>$ for i in {1..10}; do curl 1.2.3.4; done
+This is B
+This is A
+This is B
+This is A
+This is B
+This is A
+This is B
+This is A
+This is B
+This is A
+</code></pre>
+
+<p>We can change the weighting of one server to see how options could be used to drain or concentrate connections.</p>
+
+<p>First change the scheduling mode to Weighted Round Robin ( wrr )</p>
+
+<pre><code>$ sudo ipvsadm -E -t 1.2.3.4:80 -s wrr
+</code></pre>
+
+<p>And then make one node a bit heavier</p>
+
+<pre><code>$ sudo ipvsadm -e -t 1.2.3.4:80 -r 172.17.0.3 -m -w 3
+</code></pre>
+
+<p>Now when we do the requests we’ll see the bias in action</p>
+
+<pre><code>$ for i in {1..10}; do curl 1.2.3.4; done
+This is B
+This is B
+This is B
+This is A
+This is B
+This is B
+This is B
+This is A
+This is B
+This is B
+</code></pre>
+
+<h3 id="7-check-out-the-stats-and-rates">7. Check out the stats and rates!</h3>
+
+<p>Stats are available for the total number of packages and bytes over the lifetime of the servers.</p>
+
+<pre><code>$ sudo ipvsadm -L -n --stats --rate
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port    Conns   InPkts  OutPkts  InBytes OutBytes
+  -&gt; RemoteAddress:Port
+TCP  1.2.3.4:80           80      560     400      36000   41040
+  -&gt; 172.17.0.3:80        22      154      110     9900    11286
+  -&gt; 172.17.0.4:80        58      406      290     26100   29754
+</code></pre>
+
+<p>Rate information shows a more live view of the values per second.</p>
+
+<pre><code>$ sudo ipvsadm -L -n --rate
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port      CPS    InPPS   OutPPS    InBPS   OutBPS
+  -&gt; RemoteAddress:Port
+TCP  1.2.3.4:80             1      9       6         562     641
+  -&gt; 172.17.0.3:80          0      3       2         169     192
+  -&gt; 172.17.0.4:80          1      6       4         394     449
+</code></pre>
+
+<p>You can see how this would be a fairly straight forward way to control a TCP load balancer!</p>
+
+<p>This is ideally suited to doing L4 load balancing in front of a Kubernetes cluster’s ingress controllers. This allows the ingress controllers to focus on per-service routing logic (L7) which is arguably much harder to do correctly ourselves.</p>
+
+<h2 id="additional-thoughts">Additional Thoughts</h2>
+
+<h3 id="controlling-an-ipvs-host-from-kubernetes">Controlling an IPVS host from Kubernetes</h3>
+
+<p>K8s would control and interact with the IPVS host via its cloud controller manager (or a bespoke custom resource, but external load balancers are already a concept in the CCM). The CCM would ensure that the load balancer has the correct K8s node IPs and ports configured for either ingress resources/controllers, specific Node ports, or Service IPs (if these are routable).</p>
+
+<h3 id="connection-draining-between-servers">Connection draining between servers</h3>
+
+<p>You could use the Weighted Round Robin scheduler to achieve a kind of connection draining effect between two servers O (old) and N(new) in the following manner:</p>
+
+<ol>
+<li>Set O.weight to 100</li>
+<li>Add server N with weight 0(0% of requests)</li>
+<li>Over an period T at interval I, reduce O.weight and increase N.weight</li>
+</ol>
+
+<h3 id="using-health-checks-to-remove-dead-hosts">Using health checks to remove dead hosts</h3>
+
+<p>You could set up your IPVS host to do health checks against the hosts in a particular service and if it finds any of them to be bad or not responding as expected, can set the hosts weight value to 0. Effectively stopping traffic from being sent to that host. Once the healthcheck begins returning correctly, requests can be sent once again to that host.</p>
+
+<p>Your CI/CD setup could preempt this by indicating to the IPVS host that a particular host is going to be unavailable while an app is redeployed.</p>
+
+<h3 id="health-checks-for-ipvs">Health checks for IPVS</h3>
+
+<p>It would be a good idea to have a health check or metrics coming out of the IPVS hosts themselves. Since <code>ipvsadm</code> can expose <code>--stats</code> and <code>--rates</code> these could naturally be included as well as the normal Linux indicators for dropped packets, dropped connections, and inflight connections. This is the place we’d want to be aware of DoS patterns, so you’d want to keep an eye on memory usage and that sort of thing.</p>
+
+<p>Perhaps a little prometheus endpoint could be written help extract these things from <code>ipvsadm</code>. Although it looks like the same information is available in raw form from <code>/proc/net/ip_vs_stats</code>.</p>
+
+<h2 id="related-golang-libraries">Related Golang libraries</h2>
+
+<ul>
+<li><a href="https://github.com/mqliang/libipvs">https://github.com/mqliang/libipvs</a> (uses netlink?? socket)</li>
+<li><a href="https://github.com/tehnerd/gnl2go/">https://github.com/tehnerd/gnl2go/</a> (also netlink, see here)</li>
+<li><a href="https://github.com/nanobox-io/golang-lvs">https://github.com/nanobox-io/golang-lvs</a> (just calls ipvsadm commands)</li>
+</ul>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2018-04-29-faultz/"><i class="fa fa-chevron-circle-left"></i> Thoughts on a fault injection API</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

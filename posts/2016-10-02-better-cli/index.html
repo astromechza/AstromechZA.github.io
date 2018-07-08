@@ -1,0 +1,390 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Building better command-line tools and applications</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2016-10-02T21:23:26&#43;01:00">Oct 2, 2016</time>
+        </li>
+        
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="https://astromechza.github.io/tags/cli/">#CLI</a>
+                
+            </em>
+        </li>
+        
+
+        <li>8 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>A collection of tips and tricks for writing CLI-driven tools and applications.
+None of these are official guidelines of any kind but rather just the things I
+like to keep in mind when writing executable binaries, scripts, and even larger
+applications. Of course, not all of these always apply, but they&rsquo;re nice to have.</p>
+
+<h3 id="1-always-use-a-proper-option-parser">1. Always use a proper option parser.</h3>
+
+<p>At first you might only need one or two &lsquo;positional&rsquo; arguments, but soon as you
+start wanting to support &lsquo;optional&rsquo; arguments, usage, help, version info etc..
+you soon find that using a pre-built option parser will make it far easier to
+handle everything from automatic help generation, type/range checking, choices,
+optionals, subcommands, and almost anything else.</p>
+
+<p>Examples are:</p>
+
+<ul>
+<li><code>optparse</code>, <code>argparse</code>, <code>click</code> for python</li>
+<li><code>flag</code> for Golang</li>
+</ul>
+
+<h4 id="1-1-always-respond-to-help">1.1 Always respond to <code>--help</code></h4>
+
+<p>When a user finds an odd executable or script they usually want to find out what
+it does and what it can be used for. The user will be hesitant to run the
+executable without any arguments as this might still do something! So even if
+your cli doesn&rsquo;t support any arguments it&rsquo;s generally worth while responding
+correctly to <code>--help</code> and providing information such as usage, description,
+arguments allowed etc.</p>
+
+<p>It&rsquo;s also a good idea to add a project url to the help text so that users can
+get help, upgrade, or contribute improvements.</p>
+
+<h4 id="1-2-respond-to-version">1.2 Respond to <code>--version</code></h4>
+
+<p>Unless your executable will only be written once and will not need to be
+maintained or distributed you probably have some concept of &ldquo;version&rdquo;. Whether
+it is a semantic version number, git commit, build date, or build name it&rsquo;s
+important to allow a user (or yourself) to extract this information from the
+distributed executable. My personal preference is to use a &lsquo;0.0.0&rsquo; version number
+and a Linux epoch datetime which is then overriden with the real details when
+making an official release build.</p>
+
+<p>I like to have something like the following:</p>
+
+<pre><code>$ thing --version
+Version: &lt;version language&gt; (&lt;git hash&gt;) at &lt;date time&gt;
+</code></pre>
+
+<h4 id="1-3-provide-an-option-for-machine-readable-output">1.3 Provide an option for machine-readable output</h4>
+
+<p>If it&rsquo;s a tool that generates some output, you can make it easier to pass the
+results into further processes by switching to machine readable output.</p>
+
+<p>CSV and JSON formats are good for this sort of thing. To allow people
+to run <code>head</code>, <code>tail</code>, <code>grep</code> as a step in a pipeline, output a single csv, or
+json structure per line. (<code>--json</code> or <code>--csv</code>)</p>
+
+<p>Remember that if you&rsquo;re doing structure output, you can&rsquo;t intefere with it by
+printing status messages or progress alerts to <code>stdout</code>, you&rsquo;ll need to push
+everything to <code>stderr</code>.</p>
+
+<p>For example, if the normal output is:</p>
+
+<pre><code>Animal              Legs
+Lion                4
+Ostrich             2
+Spider              8
+</code></pre>
+
+<p>Then a structured output could be:</p>
+
+<pre><code>animal,legs
+Lion,4
+Ostrich,2
+Spider,8
+</code></pre>
+
+<p>Or</p>
+
+<pre><code>{&quot;animal&quot;: &quot;Lion&quot;, &quot;legs&quot;: 4}
+{&quot;animal&quot;: &quot;Ostrich&quot;, &quot;legs&quot;: 2}
+{&quot;animal&quot;: &quot;Spider&quot;, &quot;legs&quot;: 8}
+</code></pre>
+
+<h4 id="1-4-if-you-take-a-file-as-input-consider-also-accepting">1.4 If you take a file as input, consider also accepting <code>-</code></h4>
+
+<p>Quite a few tools accept <code>-</code> as an alias for <code>stdin</code> when they take a file as
+input (for example <code>vi -</code> will open a file containing the information from
+<code>stdin</code> stream). Consider supporting this as well so that users can pipe
+content to your executable.</p>
+
+<h3 id="2-don-t-exit-with-code-0-if-there-s-an-error">2. Don&rsquo;t exit with code 0 if there&rsquo;s an error!</h3>
+
+<p>This is critical. If you exit normally when an error occurs, a script that calls
+it may incorrectly assume that the result was correct.</p>
+
+<p>You can exit with pretty much any code from <code>0</code> to <code>255</code>. <code>0</code> always indicates success
+while anything else is seen as a failure. Some codes should be avoided as they
+are often used by Bash to indicate other issues. For example <code>127</code> usually means
+that the called executable was not found and <code>126</code> means the user did not have
+permission to execute the given item. See <a href="http://tldp.org/LDP/abs/html/exitcodes.html">exitcodes.html</a>.
+Usually stick to <code>1</code> for general errors and <code>2</code> for issues regarding incorrect
+arguments or configuration.</p>
+
+<h3 id="3-use-stderr-when-necessary">3. Use stderr when necessary</h3>
+
+<p>Your process has both <code>stdout</code> and <code>stderr</code> output streams. Although these are
+separate streams that can be redirected by the user, they are mostly just interleaved
+in the user&rsquo;s terminal. Use these wisely and give the user the power of picking
+which parts of the output streams they care most about. Print errors and warnings
+to stderr while keeping your traditional output on the stdout stream.</p>
+
+<p>The stderr stream can be useful when doing machine-readable output. You may want
+to print warnings and errors without corrupting the structured output on stdout.
+You can use stderr for this and the user can split out the structured data from
+the error stream.</p>
+
+<h3 id="4-use-appropriate-tense-and-detail-in-your-error-messages">4. Use appropriate tense and detail in your error messages</h3>
+
+<p>If an error occurs, <strong>always</strong> include a reason, and if you can suggest a
+solution if the user is able to fix it.</p>
+
+<pre><code>USELESS: could not open file!
+USEFUL:  could not open file &quot;/bob/john&quot;: it does not exist!
+</code></pre>
+
+<p>Use <em>present</em> tense for permanent errors and <em>past</em> tense for more temporary
+issues that might not occur next time:</p>
+
+<pre><code>TEMPORARY: could not open file &quot;/bob/john&quot;
+PERMANENT: cannot open file &quot;!*&amp;^*!&amp;#$&quot;
+</code></pre>
+
+<p>For invalid values, mention <em>why</em> and <em>how</em> it was invalid:</p>
+
+<pre><code>BAD:    value was out of range
+BETTER: value 10532 was out of range [0 -&gt; 100]
+BETTER: could not parse &quot;837af&quot; as integer
+BETTER: expected Integer argument, got String
+</code></pre>
+
+<p>Consider adding suggestions:</p>
+
+<pre><code>An error occured, the file '/something/else' was not readable. Make sure you
+have the correct permissions to read it.
+</code></pre>
+
+<p>It may be longer, but it certainly provides much more useful information for a
+user.</p>
+
+<h3 id="5-you-can-do-some-great-things-with-ansi-control-codes">5. You can do some great things with ANSI control codes</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI</a> escape codes can be used
+to control formatting, color, and other output options of Linux terminals. To
+encode this information, certain sequences of bytes are embedded into the text
+which specific terminals extract and interpret.</p>
+
+<p>The most commonly used codes are those controlling the colour of the output but
+other commonly supported options are background colour, intensity (bold/normal)
+and underline.</p>
+
+<p>Use coloured output carefully, it&rsquo;s a useful way of making output easier
+for humans to parse but can often make it over-the-top gaudy.</p>
+
+<p>One of the basic things can be printing anything to stderr in red.</p>
+
+<p>Other crazy things:</p>
+
+<ul>
+<li>set window title</li>
+<li>blink text</li>
+<li>BEL alert tone</li>
+<li>arbitrary RGB colours</li>
+</ul>
+
+<h3 id="6-extended-ascii-and-unicode">6. Extended ASCII and unicode</h3>
+
+<p>If your terminal supports it, you can use the <a href="http://www.theasciicode.com.ar/">extended ascii</a>
+and unicode characters to improve the formatting of your output.</p>
+
+<p>For example you can print tables using the box lines:</p>
+
+<pre><code>╔══════╦═════╗
+║ A    ║ B   ║
+╠══════╬═════╣
+</code></pre>
+
+<p>And almost anything you&rsquo;d like if you&rsquo;re allowed to use unicode. Remember that
+these character encodings aren&rsquo;t supported by all terminals on all platforms and
+that other tools like <code>grep</code> may not work correctly with multi-byte characters.</p>
+
+<p>Also remember that it makes although it might make your output prettier, it
+will intefere with people processing the output using <code>cut</code>/<code>awk</code>/<code>sed</code> etc..</p>
+
+<h3 id="7-character-rewriting-and-progress-bars">7. Character rewriting and progress bars</h3>
+
+<p>Quite a few utilities like <code>curl</code>, <code>wget</code> etc.. use progress bars to convey the
+status of an operation. It&rsquo;s a useful thing to add to your own tools if it may
+perform a long-running operation. To this, use the <code>\r</code> carriage return or <code>\b</code>
+backspace to delete and rewrite printed characters.</p>
+
+<p>Example in Python:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> sys
+<span style="color:#f92672">import</span> time
+
+width <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span>
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> xrange(width):
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#34;</span>)
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;#&#34;</span> <span style="color:#f92672">*</span> i)
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">*</span> (width <span style="color:#f92672">-</span> i))
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34; </span><span style="color:#e6db74">%.1f%%</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (i <span style="color:#f92672">*</span> <span style="color:#ae81ff">100.0</span> <span style="color:#f92672">/</span> width))
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>flush()
+    time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">0.1</span>)
+
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#34;</span>)
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;#&#34;</span> <span style="color:#f92672">*</span> width)
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34; 100.0%</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)</code></pre></div>
+<p><strong>Be aware</strong> that the backspaces don&rsquo;t have any effect when you&rsquo;re not in a
+p/tty environment! This is why piping a progress bar ends up with hundreds of
+lines of intermediate progress. See the next point on how to avoid this!</p>
+
+<h3 id="8-detect-p-tty-vs-dumb-environment">8. Detect P/TTY vs dumb environment</h3>
+
+<p>If you&rsquo;re using ANSI control codes, <code>\r</code> carriage return or <code>\b</code> backspace
+or redrawing portions of lines, use TTY detection so that you get the nice
+pretty output when a human is behind the controls but degrade to useable
+output when piping it into a file, or further processing.</p>
+
+<p>It&rsquo;s always a horrible experience reading through a log file containing sudden
+ANSI codes.</p>
+
+<h3 id="9-detecting-the-terminal-size">9. Detecting the terminal size</h3>
+
+<p>Editors like <code>vi</code>, <code>nano</code> etc expand to fill the full size of the terminal, they
+do this by using ANSI control codes to clear the screen and to write characters
+at arbitrary positions.</p>
+
+<p>You might also find useful moments to use the width of the terminal as a limit
+for things like progress bars or tables.</p>
+
+<p>Some terminals provide the <code>$LINES</code> and <code>$COLS</code> variables, other tools use the
+<code>SIGWINCH</code> signal that indicates that the terminal was resized. Other languages
+can use their own libraries to extract this information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> fcntl
+<span style="color:#f92672">import</span> termios
+<span style="color:#f92672">import</span> struct
+<span style="color:#f92672">import</span> errno
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminal_size</span>(default_width<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>, default_height<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>):
+    <span style="color:#66d9ef">try</span>:
+        h, w, hp, wp <span style="color:#f92672">=</span> struct<span style="color:#f92672">.</span>unpack(<span style="color:#e6db74">&#39;HHHH&#39;</span>, fcntl<span style="color:#f92672">.</span>ioctl(<span style="color:#ae81ff">1</span>, termios<span style="color:#f92672">.</span>TIOCGWINSZ, struct<span style="color:#f92672">.</span>pack(<span style="color:#e6db74">&#39;HHHH&#39;</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)))
+        <span style="color:#66d9ef">return</span> w, h
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">IOError</span> <span style="color:#66d9ef">as</span> e:
+        <span style="color:#66d9ef">if</span> e<span style="color:#f92672">.</span>errno <span style="color:#f92672">==</span> errno<span style="color:#f92672">.</span>ENOTTY:
+            <span style="color:#66d9ef">return</span> default_width, default_height
+        <span style="color:#66d9ef">raise</span></code></pre></div>
+<p>Again, remember that this only makes sense in a TTY interface.</p>
+
+<h3 id="10-if-environment-variables-are-affecting-the-execution-tell-the-user">10. If environment variables are affecting the execution, TELL THE USER</h3>
+
+<p>Something else that is a pet peeve of mine is scripts that use an environment
+variable to silently change the way they operate. It&rsquo;s really useful for it to
+declare when an environment variable is overriding the default settings or
+workflow.</p>
+
+<pre><code>$ do-the-thing
+$DOTHETHING_OPT = 12 was declared, doing the thing 12 times.
+...
+</code></pre>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2016-09-14-the-road-to-hyperthreading/"><i class="fa fa-chevron-circle-left"></i> The road to hyperthreading</a>
+        </li>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2018-04-21-python-skeletons/">Python Skeletons <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>

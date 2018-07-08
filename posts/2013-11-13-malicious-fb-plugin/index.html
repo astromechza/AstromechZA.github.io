@@ -1,0 +1,214 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>AstromechZA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Ben Meier" />
+  <meta name="generator" content="Hugo 0.42.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://astromechza.github.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://astromechza.github.io/">AstromechZA</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/@benmeier_"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+          
+        <li><a href="https://github.com/AstromechZA"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>My Mind on Code</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://astromechza.github.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Malicious Facebook plugin analysis</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2013-11-13T21:23:26&#43;01:00">Nov 13, 2013</time>
+        </li>
+        
+        
+
+        
+
+        <li>5 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>An interesting payload was being passed around Facebook last night. It took the form of an enticing plugin that claimed to change the colour of one’s Facebook. I first came across it when I was apparently ‘tagged’ in a photo.
+The photo looked like this:</p>
+
+<p><img src="https://astromechza.github.io/images/fb1.jpg" alt="FB1" /></p>
+
+<p>The tagged photo advertises a pretty shiny Facebook conversion tool and asks people to click the link. Some things to note: The layout of Facebook in the image is not current, it is definitely an old layout from before Timeline.</p>
+
+<p>Clicking on the link (Incognito mode!) takes you to this page:</p>
+
+<p><img src="https://astromechza.github.io/images/fb2.jpg" alt="FB2" /></p>
+
+<p>The screenshot it shows is a bit more reasonable, but is still a pre-timeline layout. A big green button lets you install the plugin itself. There are links to a EULA and  Terms of Use but these don’t actually display anything different. Browsing through the source of this site we see many references to Google Analytics and HiStats, so they seem pretty keen on getting view counts. Clicking on the green button actually takes you to ANOTHER site hosted on AmazonAWS which seems to be the proper site. This new one has working Terms of Use and EULA and has less spelling mistakes -_-</p>
+
+<p>Clicking on the link now blue button shows a Chrome app installer dialog:</p>
+
+<p><img src="https://astromechza.github.io/images/fb3.jpg" alt="FB3" /></p>
+
+<p>By this point alarm bells should be ringing, those permission requests are pretty nasty. So now we need to pull the source code to find out what it does. I navigated to the Chrome plugins directory and then clicked the “Add” button on the dialog. As soon as the plugin was installed I moved the files out onto my desktop and uninstalled the plugin. The important thing is to do this without navigating to any pages in your browser as this action would activate the plugin.</p>
+
+<p>The files for the extension show some Javascript files plus a few resources (images and some html). The manifest.json, which loads a chrome plugin, contains:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{
+   <span style="color:#e6db74">&#34;background&#34;</span><span style="color:#f92672">:</span> {
+      <span style="color:#e6db74">&#34;scripts&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;background.js&#34;</span> ]
+   },
+   <span style="color:#e6db74">&#34;content_scripts&#34;</span><span style="color:#f92672">:</span> [ {
+      <span style="color:#e6db74">&#34;js&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;script.js&#34;</span>, <span style="color:#e6db74">&#34;BlobBuilder.js&#34;</span>, <span style="color:#e6db74">&#34;canvas-toBlob.js&#34;</span> ],
+      <span style="color:#e6db74">&#34;matches&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;http://*/*&#34;</span>, <span style="color:#e6db74">&#34;https://*/*&#34;</span> ],
+      <span style="color:#e6db74">&#34;run_at&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;document_end&#34;</span>
+   }, {
+      <span style="color:#e6db74">&#34;js&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;jquery.min.js&#34;</span>, <span style="color:#e6db74">&#34;jquery.miniColors.js&#34;</span>, <span style="color:#e6db74">&#34;content.js&#34;</span> ],
+      <span style="color:#e6db74">&#34;matches&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;http://*/*&#34;</span>, <span style="color:#e6db74">&#34;https://*/*&#34;</span> ],
+      <span style="color:#e6db74">&#34;run_at&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;document_end&#34;</span>
+   } ],
+   <span style="color:#e6db74">&#34;content_security_policy&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;script-src &#39;self&#39; https://ssl.google-analytics.com; object-src &#39;self&#39;&#34;</span>,
+   <span style="color:#e6db74">&#34;description&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;CoIor Changer&#34;</span>,
+   <span style="color:#e6db74">&#34;icons&#34;</span><span style="color:#f92672">:</span> {
+      <span style="color:#e6db74">&#34;128&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;icon128.png&#34;</span>,
+      <span style="color:#e6db74">&#34;16&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;icon16.png&#34;</span>,
+      <span style="color:#e6db74">&#34;48&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;icon48.png&#34;</span>
+   },
+   <span style="color:#e6db74">&#34;key&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDRWBwY0i/bvsiEN8otbfEUbo0Vxme2a9nbyygZTf2YjlirxJmDqdUU7WxxrOTRUBwWBWG6NsUu49wqi2CS1aarffWtPGmNha0bRQivuZJBJ43O0KsvTClsxfecFMZ8AVn6r0KLO+DDdSMYw5pDYCRsZNqtnh/Kpw4itCKSGC+rqwIDAQAB&#34;</span>,
+   <span style="color:#e6db74">&#34;manifest_version&#34;</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>,
+   <span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;CoIor Changer&#34;</span>,
+   <span style="color:#e6db74">&#34;permissions&#34;</span><span style="color:#f92672">:</span> [ <span style="color:#e6db74">&#34;http://*/*&#34;</span>, <span style="color:#e6db74">&#34;https://*/*&#34;</span>, <span style="color:#e6db74">&#34;tabs&#34;</span>, <span style="color:#e6db74">&#34;cookies&#34;</span>, <span style="color:#e6db74">&#34;notifications&#34;</span>, <span style="color:#e6db74">&#34;contextMenus&#34;</span>, <span style="color:#e6db74">&#34;webRequest&#34;</span>, <span style="color:#e6db74">&#34;webRequestBlocking&#34;</span>, <span style="color:#e6db74">&#34;storage&#34;</span>, <span style="color:#e6db74">&#34;unlimitedStorage&#34;</span> ],
+   <span style="color:#e6db74">&#34;update_url&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;http://clients2.google.com/service/update2/crx&#34;</span>,
+   <span style="color:#e6db74">&#34;version&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;1.0.4&#34;</span>
+}
+</code></pre></div>
+<p>Important things to note:</p>
+
+<ul>
+<li>It has a blank background script, thankfully this means it doesn’t do anything out of sight.</li>
+<li>It loads jQuery and the jQuery Color picker, this are presumably for actually changing the colours.</li>
+<li>Blob builder and Canvas to Blob scripts, these are legit scripts used for transferring files as blob objects.</li>
+<li>A long permissions list, including access to pretty much everything.</li>
+<li>An update URL! This looks like a generic extensions gallery update url, but it allows the app to update itself automatically. This is bad as it could suddenly turn malicious without much change.</li>
+<li>content.js which does all the work.</li>
+</ul>
+
+<h2 id="analysing-content-js">Analysing content.js</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-content.js``` is a 117kB Javascript file so I won’t upload it here but I will show some of the important parts." data-lang="content.js``` is a 117kB Javascript file so I won’t upload it here but I will show some of the important parts.">The process starts off innocently enough:
+
+- Create some local storage for the chosen colours
+- Apply the embedded css to the page (the css lines take up most of the 1000 lines)
+- Add some html for the colour picker and set its events to store new colours and reload the page
+
+So all of the legit work is done in the first 1000 lines or so. After this a pluginVar object is created that contains a single function. Then at the bottom of the file, some storage syncing is done and then on the third last line:
+
+```javascript
+PluginVar.doShit();</code></pre></div>
+<p>What this code does:</p>
+
+<ol>
+<li>Load more settings from another AmazonAWS hosted json page.  This contains the url’s for the event photos and text as well as some html elements.</li>
+<li>Inject jQuery if this is not yet injected</li>
+<li>Inject a hit counter image</li>
+<li>If the page is a facebook page then continue otherwise stop.</li>
+<li>Starts a new www.facebook.com request in order to pull user id from header</li>
+<li>Upload a new photo. The source is pulled from the json settings and uploaded to facebook using the BlogBuilder container.</li>
+<li>Tag some random number of friends in the photo</li>
+<li>If event has not been created, create the event and join it</li>
+<li>otherwise: upload event photo, link it to the event, invite some more friends to the event</li>
+<li>store a list of all the users friends in the local storage.</li>
+<li>Clear all notifications (this is a bit weird)</li>
+<li>If not blogged already: blog it:</li>
+<li>Make request to blogger.com</li>
+<li>If not logged on exit (THOUGH there are commented lines about creating a blogger account)</li>
+<li>otherwise create a new blog!</li>
+<li>Make new random blog name and create a blog with the html files stored in the extension.</li>
+<li>Keep trying if there’s a failure.</li>
+<li>Store created blog urls and friend list so that next time it can link to this new blog and invite new friends to it.</li>
+</ol>
+
+<p>The reason it creates the random blogger blogs for rehosting itself I assume is so that Facebook can’t block the link. Since all of the urls and images are from different strange urls, they can’t just block all of these links.</p>
+
+<p>And then it stops, after accessing all this personal data it just spreads itself around a bit and then stops. Luckily it does nothing more malicious than this, for now. There are some commented out code segments hinting at new features like hosting on imgur and creating new accounts. Sketchy stuff :/</p>
+
+<p>The developer could at any point update it using the chrome gallery autoupdating and suddenly it could become way more malicious. Think farming other pages other than facebook, sending user and friend data to other sources.</p>
+
+<p>EDIT:</p>
+
+<p>It turns out that the theme itself is perfectly legit. Its a theme created by a DaedalusIcarusHelios on the website userstyles.org. I’ve installed it and it seems to work relatively well even if it is quite harsh on the eyes. There are plenty of other themes on that site as well.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2013-06-07-programmatic-document/"><i class="fa fa-chevron-circle-left"></i> Programmatic PDF generation</a>
+        </li>
+        
+        
+        <li>
+            <a href="https://astromechza.github.io/posts/2014-03-22-the-birth-of-this-blog/">The birth of this blog <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Ben Meier | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://astromechza.github.io/index.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://astromechza.github.io/js/scripts.js"></script>
+</body>
+
+</html>
