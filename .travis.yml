@@ -11,10 +11,10 @@ script:
 deploy:
   provider: pages
   local-dir: public
-  target-branch: gh-pages
+  target-branch: master
   skip-cleanup: true
   github-token: 
     secure: "XEF4Ejq2vsWB261anaBCNQPA9PugX82jBp/bnxZVzC46xsImw5/Cojzeb+Jxu9KkXgfKruDMA4mj5HFU3Su8tsOGLJqKCZ4Pc5paVL4QkWWy200kxc08Usom9JERU2CZB7RIq8DYTioUPsVky0JdXYB6CvSuI9tSuLgfhFJ+SxLpxDeSs3xm0ZsFvFv9YbnrJrYEivlnwSaYjZLT2dVN52eBLbxzcJZ0WXV5wSR+B8rNt/ql4BOMFrON0LRcMtpAGByqdgcfNRXBmPOB/BLlvxdbzQZSkqbE0kNycmoQW8u7+cPzjtXKa+lYJhlG99HYFhJvas2PZRVkr2zItzddPSax8Vv2fhngiqMRs4cAKr7Ugg9NBN/xeJUNT3D9qA7T4JF2FOeKPeU+0wRRdv5gQxihDG8MeBoPAi6K2iFSNQf7CBxpfARjqbK1mYCYCRGaV6Xtkf1Vo4IqHTPRwM5NHNXL+zihRm7tKvqtXrn+pEl2OeJ8dbQsmoN/mi/sKO2ml2rNybVMVjMg3MgFsgnfmVr0uYEhJm4zYxJxAqy3Wl9udWeGZRZKz9bfESjZYNZCKxNT+CMkz5K7MeC57mqZKam1hhrEopuPPR9AwTouvg4KccxfvsxF2P12iYjPZaU1hbpxq80Cu8iWRKLV32G7S9UwKBLKUFo1mEjFs3RaUoA="
   keep-history: true
   on:
-    branch: master
+    branch: develop
