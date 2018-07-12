@@ -63,11 +63,12 @@ Briefly:
 
 **Note:** A "merge" commit is one which has more than one parent. Usually as a result of a `git merge` or something.
 
+<a name="code"></a>
+
 ### How it's implemented in a project
 
 In some crazy world you could get away with implementing this in a `Makefile`. However, this is not that world so I prefer to write it as a broadly compatible Python script that a `Makefile` can call if necessary.
 
-<a name="code"></a>
 <script src="https://gist.github.com/AstromechZA/91d724c3601b1f32ce8060169d797560.js"></script>
 
 You can then use the `ver.py` file to access the version number when you need it during build and deployment. An example of the version progression may be:
