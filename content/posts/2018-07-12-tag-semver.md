@@ -74,7 +74,7 @@ In some crazy world you could get away with implementing this in a `Makefile`. H
 You can then use the `ver.py` file to access the version number when you need it during build and deployment. An example of the version progression may be:
 
 ```
-$ for r in $(git rev-list HEAD); do git --no-pager show $r -s --oneline; python ver.py $r; done
+$ for r in $(git rev-list HEAD); do git --no-pager show $r -s --oneline; python ver.py --ref $r; done
 365a400 (HEAD -> feature-D) My most recent commit
 0.1.0-dev1
 3789ecb (origin/master, master, v0.1) Merge feature-C to master
