@@ -1,7 +1,7 @@
 +++
 title = "Coordinated Omission in load measurements"
 date = 2018-08-12T09:00:00+01:00
-draft = true
+draft = false
 tags = ["monitoring"]
 +++
 
