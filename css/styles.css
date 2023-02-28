@@ -57,19 +57,6 @@ time {
   float: right;
 }
 
-#container header ul li {
-  margin-left: 1em;
-}
-
-@media only screen and (max-width: 800px) {
-  #container header ul {
-    float: none;
-  }
-  #container header ul li {
-    margin: 0 1em 0 0;
-  }
-}
-
 #container nav {
   border-bottom: solid 3px #cecece;
   padding-bottom: 0.5em;
@@ -159,6 +146,12 @@ time {
 }
 
 #container main article p code {
+  padding: 0.2em;
+  background-color: #e7f1f5;
+  font-size: 0.9em;
+}
+
+#container main article li code {
   padding: 0.2em;
   background-color: #e7f1f5;
   font-size: 0.9em;
