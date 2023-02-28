@@ -15,6 +15,7 @@ pygmentsCodeFences = true
     name = "Ben Meier"
     github = "AstromechZA"
     twitter = "@benmeier_"
+    mastodon = "https://hachyderm.io/@benmeier_"
 
 [params]
     tagline = "My Mind on Code"
