@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop  # Set a branch to deploy
+
   workflow_dispatch:
 
 permissions:
@@ -35,6 +36,11 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
