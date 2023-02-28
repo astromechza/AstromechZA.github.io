@@ -6,11 +6,12 @@
 - Hugo to render them
 - Github actions to do the build
 - Served via Github pages
-  
 
 Built using Hugo templating and publishing built html to the master branch using github actions.
 
 ## Development
+
+Checkout the `main` branch.
 
 ```bash
 $ brew install hugo
